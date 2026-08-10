@@ -1,12 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
-
+import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: node({ mode: 'standalone' }),
+  adapter: cloudflare(),
   server: {
     host: true,
     allowedHosts: true
@@ -15,7 +14,6 @@ export default defineConfig({
     server: {
       allowedHosts: true
     },
-
     plugins: [tailwindcss()]
   }
 });
