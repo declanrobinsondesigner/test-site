@@ -1,0 +1,97 @@
+/*
+  RESTORE POINT — homepage section backgrounds
+  Saved: 2026-07-29 (before continuous-flow gradient pass)
+
+  To restore the previous "gradients on some sections only" look,
+  paste these rules back into:
+  - src/pages/index.astro
+  - src/components/ProductShowcase.astro
+
+  Also restore scroll-arrows to:
+	.scroll-arrows {
+		display: flex;
+		justify-content: center;
+		position: relative;
+		z-index: 3;
+		margin: -1.35rem 0;
+		padding: 0;
+		background: transparent;
+		pointer-events: none;
+	}
+	.scroll-arrow {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+		padding: 0.75rem;
+		text-decoration: none;
+		pointer-events: auto;
+	}
+*/
+
+/* === index.astro === */
+
+.hero {
+	position: relative;
+	padding: 5rem 0 6rem;
+	background: #161616;
+	background:
+		radial-gradient(ellipse at 70% 50%, rgba(196, 30, 58, 0.35) 0%, transparent 55%),
+		linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	overflow: hidden;
+}
+
+.collections {
+	background: #0d0d0d;
+	background: var(--bgs-black);
+}
+
+.suggestion {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(ellipse at 15% 20%, rgba(196, 30, 58, 0.28) 0%, transparent 45%),
+		radial-gradient(ellipse at 90% 80%, rgba(196, 30, 58, 0.12) 0%, transparent 40%),
+		linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	border-top: 1px solid var(--bgs-gray-dark);
+	border-bottom: 1px solid var(--bgs-gray-dark);
+}
+
+.usp {
+	background: var(--bgs-black);
+	border-bottom: 1px solid var(--bgs-gray-dark);
+}
+
+.garage {
+	position: relative;
+	overflow: hidden;
+	background:
+		radial-gradient(ellipse at 80% 30%, rgba(196, 30, 58, 0.22) 0%, transparent 50%),
+		linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	border-bottom: 1px solid var(--bgs-gray-dark);
+}
+
+.reviews {
+	background: var(--bgs-charcoal);
+	border-top: 1px solid var(--bgs-gray-dark);
+	border-bottom: 1px solid var(--bgs-gray-dark);
+}
+
+.about {
+	background: #0d0d0d;
+	background: var(--bgs-black);
+}
+
+.connect {
+	background: #161616;
+	background: var(--bgs-charcoal);
+}
+
+/* === ProductShowcase.astro === */
+
+.showcase {
+	background: var(--bgs-black);
+	border-top: 1px solid var(--bgs-gray-dark);
+	border-bottom: 1px solid var(--bgs-gray-dark);
+	padding: 3.25rem 0;
+}

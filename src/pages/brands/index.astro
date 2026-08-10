@@ -1,0 +1,189 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCatalogueVendors } from '../../data/catalogue';
+import { buildBrandNav } from '../../data/navigation';
+
+const liveVendors = await getCatalogueVendors();
+const brands = buildBrandNav(liveVendors);
+---
+
+<Layout title="Brands | Bad Girls Should">
+	<Header />
+
+	<main>
+		<section class="catalog">
+			<div class="catalog-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">Brands</span>
+				</nav>
+
+				<header class="catalog-header">
+					<p class="eyebrow">Shop · Labels We Stock</p>
+					<h1>Brands</h1>
+					<p class="lede">
+						Rusty Pistons, Rumble59, Hotrod Hellcat, Steady Clothing, King &amp; Queen Kerosin,
+						Liquorbrand and more — driven by the vendor on each Shopify product.
+					</p>
+				</header>
+
+				<ul class="brand-grid">
+					{
+						brands.map((brand) => (
+							<li>
+								<a class="brand-card" href={`/brands/${brand.handle}`}>
+									<span class="brand-name">{brand.label}</span>
+									<span class="brand-cta">Shop →</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.catalog {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		min-height: 70vh;
+		background:
+			radial-gradient(ellipse at 75% 10%, rgba(196, 30, 58, 0.2) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.catalog-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.catalog-header {
+		position: relative;
+		max-width: 48rem;
+		margin-bottom: 3rem;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.15;
+		margin: 0 0 1rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0;
+		letter-spacing: 0.02em;
+	}
+
+	.brand-grid {
+		position: relative;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+		gap: 1rem;
+	}
+
+	.brand-card {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.15rem 1.25rem;
+		text-decoration: none;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 6px;
+		background: var(--bgs-charcoal);
+		transition:
+			border-color 0.2s,
+			background 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.brand-card:hover {
+		border-color: var(--bgs-crimson);
+		background: rgba(196, 30, 58, 0.1);
+		box-shadow: 0 0 22px var(--bgs-crimson-glow);
+	}
+
+	.brand-name {
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--bgs-white);
+	}
+
+	.brand-cta {
+		font-size: 0.75rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--bgs-crimson-bright);
+		flex-shrink: 0;
+	}
+</style>

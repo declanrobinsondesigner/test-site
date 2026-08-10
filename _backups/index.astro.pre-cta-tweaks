@@ -1,0 +1,1466 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import stallPhoto from '../assets/bgs-stall.jpg';
+import logo from '../assets/bgs-logo.png';
+
+const collections = [
+	{
+		title: 'Loud Graphic Tees',
+		description: 'Rockabilly, gothic, biker, hot rod — the big graphics that refuse to whisper. From Medium up to XL+.',
+		tag: 'Bestsellers',
+		href: '/mens/t-shirts',
+	},
+	{
+		title: "Women's",
+		description:
+			'Dresses, jumpers, cardigans, tops & skirts that actually fit — Hotrod Hellcat, Killstar, Liquorbrand & the crew.',
+		tag: 'Women',
+		href: '/womens',
+	},
+	{
+		title: 'Hoodies & Jackets',
+		description: 'Zip hoodies, hot rod jackets, layered armour for bigger chests and colder nights.',
+		tag: "Men's",
+		href: '/mens/zip-up-hoodies',
+	},
+	{
+		title: 'Bags & Bits',
+		description: 'Bowling bags, cross-bodies, wallet chains — the finishing touch with attitude.',
+		tag: 'Accessories',
+		href: '/womens/bags',
+	},
+];
+
+const reviews = [
+	{
+		name: 'Sarah M.',
+		quote:
+			'Thank you so much, love it. Very speedy delivery and very well packaged. Great seller and highly recommended. A ++++',
+	},
+	{
+		name: 'Claire T.',
+		quote:
+			"Lovely dress brand new condition. Well packaged and on time. Great value and as described — great for summer and can't wait to wear it. From a great seller, great communication too. Thank you. Highly recommended from a seller who truly cares. Cheers x",
+	},
+	{
+		name: 'Dave R.',
+		quote: 'Awesome seller! Super fast postage, and great communication, thankyou!',
+	},
+	{
+		name: 'Michelle K.',
+		quote:
+			'Have bought multiple items from here and always perfect! As described and super quick despatch. Thank you.',
+	},
+	{
+		name: 'Jess P.',
+		quote:
+			'Perfect seller, amazing dress, fast postage, love my tiki sticker! Thank you! Just perfect all round and would definitely buy from again in a heartbeat! Have a great rest of your week x THANK YOU!',
+	},
+	{
+		name: 'Helen W.',
+		quote:
+			'Excellent quality, true to size. Beautifully packaged. The Seller was so helpful and understanding after I had a hiccup with delivery (Not Sellers fault), but Royal Mail ..the Seller was very courteous and quick to resolve. I also ordered a 2nd item from the seller and she noticed this and refunded the 2nd delivery charge will definitely order from her again.',
+	},
+];
+---
+
+
+<Layout>
+	<Header cartHref="/cart" />
+
+	<main>
+		<!-- Hero -->
+		<section class="hero" id="new-arrivals">
+			<div class="hero-overlay"></div>
+			<div class="container hero-inner">
+				<div class="hero-content">
+					<p class="eyebrow">Alt Attire · Straight Outta Grimsby</p>
+					<h1>Big Fits.<br />Bigger Attitude.</h1>
+					<p class="subheadline">
+						Rockabilly, gothic, kustom kulture — from Medium to XL+, gear that doesn’t shrink when you size up.
+					</p>
+					<div class="hero-actions">
+						<a class="btn btn-primary" href="/mens">Men's</a>
+						<a class="btn btn-primary" href="/womens">Women's</a>
+					</div>
+				</div>
+				<div class="hero-visual">
+					<img
+						src={logo.src}
+						width="320"
+						height="320"
+						alt="Bad Girls Should — skull, dagger and roses logo"
+						class="hero-logo"
+					/>
+				</div>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#about" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- About -->
+		<section class="section about" id="about">
+			<div class="container about-inner">
+				<div class="about-image-wrap">
+					<img
+						src={stallPhoto.src}
+						width="600"
+						height="450"
+						alt="Bad Girls Should market stall with rockabilly dresses, gothic tops, and alternative apparel"
+						class="about-image"
+					/>
+					<div class="about-image-accent"></div>
+				</div>
+				<div class="about-content">
+					<p class="section-eyebrow">Who We Are</p>
+					<h2 class="section-title">Grimsby-Born.<br />Rebel-Sized.</h2>
+					<p class="lead-copy">
+						Bad Girls Should is alt attire with teeth — tees, dresses, shirts, hoodies, and
+						rockabilly brands. We specialise in XL+ for people who won’t shrink their style, and
+						we stock standard sizes like Medium and Large too.
+					</p>
+					<p class="lead-copy">
+						From Summer events throughout the UK to this shop and Facebook nationwide: bigger fits,
+						everyday sizes, louder graphics, zero watered-down racks. Think lifestyle garage wear
+						and Kustom Kulture — the kind Rusty Pistons was built for.
+					</p>
+					<ul class="about-highlights">
+						<li>Tees, shirts, dresses, jumpers &amp; jackets — piled high</li>
+						<li>
+							Rusty Pistons, Rumble59, Hotrod Hellcat, Steady Clothing, King &amp; Queen Kerosin,
+							Liquorbrand &amp; more
+						</li>
+						<li>UK shipping from this shop, Facebook &amp; market pickups</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#xl-plus" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+		<section class="section usp" id="xl-plus" aria-labelledby="usp-title">
+			<div class="container usp-inner">
+				<div class="usp-copy">
+					<p class="section-eyebrow">The Point</p>
+					<h2 class="section-title" id="usp-title">XL+ That Still Looks Dangerous</h2>
+					<p class="lead-copy">
+						Extended fits are our speciality — XL, XXL, and beyond — so rebels who take up more
+						space still get the real thing. (We also do smaller sizes — don’t worry!) Plenty of
+						pieces run in Medium and Large too, so the whole crew can match the look.
+					</p>
+					<a class="btn btn-primary" href="/range">Shop All Products</a>
+				</div>
+				<ul class="usp-points">
+					<li>
+						<strong>XL &amp; XXL First</strong>
+						<span>Extended fits aren’t an afterthought — they’re the whole bloody point.</span>
+					</li>
+					<li>
+						<strong>Standard Sizes Too</strong>
+						<span>M, L, and the usual run — same loud graphics, just in everyday fits when you need them.</span>
+					</li>
+					<li>
+						<strong>Proper Alt Styling</strong>
+						<span>Rockabilly, gothic, hot rod graphics that stay loud at every size.</span>
+					</li>
+					<li>
+						<strong>Market Tough, Shop Ready</strong>
+						<span>Tried on at Summer events throughout the UK — or shop the full rack right here anytime.</span>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#garage-wear" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- Lifestyle Garage Wear -->
+		<section class="section garage" id="garage-wear" aria-labelledby="garage-title">
+			<div class="garage-glow" aria-hidden="true"></div>
+			<div class="container garage-inner">
+				<div class="garage-copy">
+					<p class="section-eyebrow">Lifestyle Garage Wear</p>
+					<h2 class="section-title" id="garage-title">Kustom Kulture.<br />Built To Get Dirty.</h2>
+					<p class="lead-copy">
+						This is the gear a hot rodder, rat rodder, or chop biker actually lives in — tough enough
+						for the garage, stylish enough to wear out. Retro, gothic, and classic design elements
+						that belong on the strip as much as under the bonnet.
+					</p>
+					<p class="lead-copy">
+						Rusty Pistons and the rest of the rack lean hard into lifestyle garage wear and Kustom
+						Kulture: loud graphics, solid builds, and fits that don’t flinch when you size up.
+					</p>
+					<a class="btn btn-primary" href="/brands">Shop The Brands</a>
+				</div>
+				<ul class="garage-points">
+					<li>
+						<strong>Hot Rod &amp; Rat Rod</strong>
+						<span>Checkered flags, pistons, and street-race attitude that still cleans up for a night out.</span>
+					</li>
+					<li>
+						<strong>Chop &amp; Biker</strong>
+						<span>Layered armour for the shed — and the ride home looking like you meant it.</span>
+					</li>
+					<li>
+						<strong>Retro · Gothic · Classic</strong>
+						<span>Kustom Kulture design language: skulls, roses, race badges, and old-school bite.</span>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#collections" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- Featured Collections -->
+		<section class="section collections" id="collections">
+			<div class="container">
+				<div class="section-header">
+					<p class="section-eyebrow">The Goods</p>
+					<h2 class="section-title">Pick Your Poison</h2>
+				</div>
+				<div class="collection-grid" id="poison-grid" data-randomise>
+					{
+						collections.map((item) => (
+							<a class="collection-card" href={item.href}>
+								<span class="collection-tag">{item.tag}</span>
+								<h3>{item.title}</h3>
+								<p>{item.description}</p>
+								<span class="collection-cta">Have a Look →</span>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#reviews" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- Reviews -->
+		<section class="section reviews" id="reviews" aria-labelledby="reviews-title">
+			<div class="container">
+				<div class="section-header reviews-header">
+					<p class="section-eyebrow">The Verdict</p>
+					<p class="reviews-stat" aria-hidden="true">10,000+</p>
+					<h2 class="section-title" id="reviews-title">Five-Star Reviews</h2>
+					<p class="lead-copy reviews-lede">
+						Over 10,000 five-star reviews from customers who already trust the gear — real feedback,
+						same attitude.
+					</p>
+				</div>
+				<div class="reviews-grid">
+					{
+						reviews.map((review) => (
+							<figure class="review-card">
+								<div class="review-stars" aria-label="5 out of 5 stars">
+									<span aria-hidden="true">★★★★★</span>
+								</div>
+								<blockquote>
+									<p>{review.quote}</p>
+								</blockquote>
+								<figcaption>{review.name}</figcaption>
+							</figure>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#suggestion-box" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- Suggestion Box -->
+		<section class="section suggestion" id="suggestion-box" aria-labelledby="suggestion-title">
+			<div class="suggestion-glow" aria-hidden="true"></div>
+			<div class="container suggestion-inner">
+				<div class="suggestion-copy">
+					<p class="section-eyebrow">Oi — You There</p>
+					<h2 class="section-title" id="suggestion-title">What's Your Flavour?</h2>
+					<ul class="flavour-list">
+						<li><span class="flavour-arrow" aria-hidden="true">↓</span> Are you a Greaser?</li>
+						<li><span class="flavour-arrow" aria-hidden="true">↓</span> A Rocker?</li>
+						<li><span class="flavour-arrow" aria-hidden="true">↓</span> A Hot Rodder hunting bigger fits?</li>
+						<li><span class="flavour-arrow" aria-hidden="true">↓</span> Want the light-coloured t-shirts?</li>
+						<li><span class="flavour-arrow" aria-hidden="true">↓</span> A Rat Rodder who wants a more gothic vibe.</li>
+					</ul>
+					<p class="suggestion-punch">
+						<strong>Tell us!</strong> Chuck a suggestion in the box and we’ll see if we can get you
+						the look you desire.
+					</p>
+				</div>
+
+				<form class="suggestion-box" id="suggestion-form">
+					<p class="box-stamp">The Suggestion Box</p>
+					<label for="suggestion" class="sr-only">Your suggestion</label>
+					<textarea
+						id="suggestion"
+						name="suggestion"
+						rows="5"
+						required
+						placeholder="Greaser? Rocker? Hot Rodder? Rat Rod gothic? Light tees? Spill it…"
+					></textarea>
+					<label for="suggestion-name" class="sr-only">Name (optional)</label>
+					<input
+						type="text"
+						id="suggestion-name"
+						name="name"
+						placeholder="Name (optional)"
+						autocomplete="name"
+					/>
+					<label for="suggestion-email" class="sr-only">Email</label>
+					<input
+						type="email"
+						id="suggestion-email"
+						name="email"
+						placeholder="Email (so we can reply)"
+						required
+						autocomplete="email"
+					/>
+					<button type="submit" class="btn btn-primary">Chuck It In</button>
+					<p class="suggestion-note">
+						Lands in our Shopify inbox. We’ll read every one — if we can get the look, we will.
+					</p>
+					<p class="form-feedback" id="suggestion-feedback" hidden></p>
+				</form>
+			</div>
+
+			<div class="container range-cta">
+				<a class="btn btn-primary" href="/range">Explore Our Range</a>
+			</div>
+		</section>
+
+		<div class="scroll-arrows" aria-hidden="true">
+			<a class="scroll-arrow" href="#connect" tabindex="-1">
+				<span></span><span></span><span></span>
+			</a>
+		</div>
+
+		<!-- Social & Newsletter -->
+		<section class="section connect" id="connect">
+			<div class="container connect-inner">
+				<div class="connect-block">
+					<p class="section-eyebrow">Don't Ghost Us</p>
+					<h2 class="section-title">Shop It. Follow It.</h2>
+					<p class="lead-copy">
+						New drops &amp; market dates on Facebook. Full rack ready to buy right here.
+					</p>
+					<div class="connect-actions">
+						<a class="btn btn-primary" href="/range">Shop All Products</a>
+						<a
+							class="btn btn-facebook"
+							href="https://www.facebook.com/people/Bad-Girls-Should/100095156064533/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+								<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+							</svg>
+							Facebook
+						</a>
+					</div>
+				</div>
+
+				<div class="connect-block newsletter">
+					<p class="section-eyebrow">Exclusive Drops</p>
+					<h2 class="section-title">Get On The List</h2>
+					<p class="lead-copy">First dibs on new drops, market dates, and fresh arrivals — XL+ and standard sizes.</p>
+					<form class="newsletter-form" id="newsletter-form">
+						<label for="email" class="sr-only">Email address</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							placeholder="your@email.com"
+							required
+							autocomplete="email"
+						/>
+						<button type="submit" class="btn btn-primary">I'm In</button>
+					</form>
+					<p class="newsletter-note">No spam — just alt fashion in every size, event news, and new arrivals.</p>
+					<p class="form-feedback" id="newsletter-feedback" hidden></p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
+	}
+
+	/* Hero */
+	.hero {
+		position: relative;
+		padding: 5rem 0 6rem;
+		background: #161616;
+		background:
+			radial-gradient(ellipse at 70% 50%, rgba(196, 30, 58, 0.35) 0%, transparent 55%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+		overflow: hidden;
+	}
+
+	.hero-overlay {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.hero-inner {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.eyebrow,
+	.section-eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5.5vw, 3.5rem);
+		line-height: 1.15;
+		margin: 0 0 1.25rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.subheadline {
+		font-size: 1.15rem;
+		font-weight: 400;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0 0 2.25rem;
+		max-width: 480px;
+		letter-spacing: 0.02em;
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.75rem;
+		font-family: var(--bgs-font-body);
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		border-radius: 4px;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition: transform 0.15s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+	}
+
+	.btn-primary {
+		background: #c41e3a;
+		background: var(--bgs-crimson);
+		color: #f5f5f5;
+		color: var(--bgs-white);
+		border-color: #c41e3a;
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 4px 20px rgba(196, 30, 58, 0.35);
+	}
+
+	.btn-primary:hover {
+		background: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson-bright);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 28px var(--bgs-crimson-glow);
+	}
+
+	.btn-outline {
+		background: transparent;
+		color: var(--bgs-white);
+		border-color: var(--bgs-gray-dark);
+	}
+
+	.btn-outline:hover {
+		border-color: var(--bgs-white);
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.btn-facebook {
+		background: #1877f2;
+		color: var(--bgs-white);
+		border-color: #1877f2;
+	}
+
+	.btn-facebook:hover {
+		background: #166fe5;
+		transform: translateY(-2px);
+	}
+
+	.hero-visual {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.hero-logo {
+		width: min(320px, 80%);
+		height: auto;
+		border-radius: 50%;
+		background: #0d0d0d;
+		filter: drop-shadow(0 0 40px rgba(196, 30, 58, 0.35));
+		animation: pulse-glow 4s ease-in-out infinite;
+	}
+
+	@keyframes pulse-glow {
+		0%,
+		100% {
+			filter: drop-shadow(0 0 30px var(--bgs-crimson-glow));
+		}
+		50% {
+			filter: drop-shadow(0 0 55px rgba(196, 30, 58, 0.55));
+		}
+	}
+
+	/* Sections */
+	.section {
+		padding: 5rem 0;
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.section-title {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		color: var(--bgs-white);
+		margin: 0;
+		font-weight: 400;
+		line-height: 1.2;
+	}
+
+	.lead-copy {
+		color: var(--bgs-gray);
+		line-height: 1.65;
+		font-weight: 400;
+		letter-spacing: 0.02em;
+	}
+
+	/* Collections */
+	.collections {
+		background: #0d0d0d;
+		background: var(--bgs-black);
+	}
+
+	.collection-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.25rem;
+	}
+
+	.collection-card {
+		position: relative;
+		background: #161616;
+		background: var(--bgs-charcoal);
+		border: 1px solid #333333;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		padding: 2rem 1.75rem;
+		text-decoration: none;
+		overflow: hidden;
+		transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+	}
+
+	.collection-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(135deg, var(--bgs-crimson-glow) 0%, transparent 60%);
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+
+	.collection-card:hover {
+		transform: translateY(-6px);
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--bgs-crimson-glow);
+	}
+
+	.collection-card:hover::before {
+		opacity: 1;
+	}
+
+	.collection-tag {
+		position: relative;
+		display: inline-block;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--bgs-crimson-bright);
+		margin-bottom: 0.75rem;
+	}
+
+	.collection-card h3 {
+		position: relative;
+		font-family: var(--bgs-font-display);
+		font-size: 1.35rem;
+		color: var(--bgs-white);
+		margin: 0 0 0.75rem;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+
+	.collection-card p {
+		position: relative;
+		margin: 0 0 1.25rem;
+		color: var(--bgs-gray);
+		font-size: 0.95rem;
+		line-height: 1.6;
+		font-weight: 400;
+		letter-spacing: 0.02em;
+	}
+
+	.collection-cta {
+		position: relative;
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-crimson-bright);
+	}
+
+	/* Scroll arrows — bridge between every section */
+	.scroll-arrows {
+		display: flex;
+		justify-content: center;
+		position: relative;
+		z-index: 3;
+		margin: -1.35rem 0;
+		padding: 0;
+		background: transparent;
+		pointer-events: none;
+	}
+
+	.scroll-arrow {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+		padding: 0.75rem;
+		text-decoration: none;
+		pointer-events: auto;
+	}
+
+	.scroll-arrow span {
+		width: 14px;
+		height: 14px;
+		border-right: 3px solid var(--bgs-crimson-bright);
+		border-bottom: 3px solid var(--bgs-crimson-bright);
+		transform: rotate(45deg);
+		opacity: 0.25;
+		animation: arrow-cascade 1.6s infinite;
+	}
+
+	.scroll-arrow span:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+
+	.scroll-arrow span:nth-child(3) {
+		animation-delay: 0.4s;
+	}
+
+	@keyframes arrow-cascade {
+		0% {
+			opacity: 0.15;
+			transform: rotate(45deg) translate(-4px, -4px);
+		}
+		50% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0.15;
+			transform: rotate(45deg) translate(4px, 4px);
+		}
+	}
+
+	/* Suggestion */
+	.suggestion {
+		position: relative;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse at 15% 20%, rgba(196, 30, 58, 0.28) 0%, transparent 45%),
+			radial-gradient(ellipse at 90% 80%, rgba(196, 30, 58, 0.12) 0%, transparent 40%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+		border-top: 1px solid var(--bgs-gray-dark);
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.suggestion-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.012) 2px,
+			rgba(255, 255, 255, 0.012) 4px
+		);
+		pointer-events: none;
+	}
+
+	.suggestion-inner {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.flavour-list {
+		list-style: none;
+		margin: 1.5rem 0 1.75rem;
+		padding: 0;
+	}
+
+	.flavour-list li {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+		font-family: var(--bgs-font-display);
+		font-size: clamp(1.35rem, 3.2vw, 2rem);
+		line-height: 1.35;
+		color: var(--bgs-white);
+		margin-bottom: 0.65rem;
+	}
+
+	.flavour-arrow {
+		color: var(--bgs-crimson-bright);
+		font-family: var(--bgs-font-body);
+		font-size: 1.1rem;
+		font-weight: 700;
+		animation: nudge-down 1.4s ease-in-out infinite;
+	}
+
+	.flavour-list li:nth-child(2) .flavour-arrow {
+		animation-delay: 0.1s;
+	}
+
+	.flavour-list li:nth-child(3) .flavour-arrow {
+		animation-delay: 0.2s;
+	}
+
+	.flavour-list li:nth-child(4) .flavour-arrow {
+		animation-delay: 0.3s;
+	}
+
+	.flavour-list li:nth-child(5) .flavour-arrow {
+		animation-delay: 0.4s;
+	}
+
+	@keyframes nudge-down {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(4px);
+		}
+	}
+
+	.suggestion-punch {
+		margin: 0;
+		max-width: 32rem;
+		font-size: 1.1rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		letter-spacing: 0.02em;
+	}
+
+	.suggestion-punch strong {
+		color: var(--bgs-crimson-bright);
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	.suggestion-box {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.75rem 1.5rem 1.5rem;
+		background: var(--bgs-black);
+		border: 2px solid var(--bgs-crimson);
+		border-radius: 4px;
+		box-shadow:
+			0 0 0 4px var(--bgs-charcoal),
+			0 16px 48px rgba(0, 0, 0, 0.45),
+			0 0 40px var(--bgs-crimson-glow);
+		transform: rotate(-0.6deg);
+	}
+
+	.box-stamp {
+		position: absolute;
+		top: -0.85rem;
+		left: 1rem;
+		margin: 0;
+		padding: 0.25rem 0.75rem;
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		font-family: var(--bgs-font-display);
+		font-size: 0.95rem;
+		letter-spacing: 0.04em;
+		transform: rotate(-2deg);
+		box-shadow: 0 4px 16px var(--bgs-crimson-glow);
+	}
+
+	.suggestion-box textarea,
+	.suggestion-box input {
+		width: 100%;
+		background: var(--bgs-charcoal);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		padding: 0.9rem 1rem;
+		color: var(--bgs-white);
+		font-family: var(--bgs-font-body);
+		font-size: 1rem;
+		outline: none;
+		resize: vertical;
+		transition: border-color 0.2s;
+	}
+
+	.suggestion-box textarea::placeholder,
+	.suggestion-box input::placeholder {
+		color: #555;
+	}
+
+	.suggestion-box textarea:focus,
+	.suggestion-box input:focus {
+		border-color: var(--bgs-crimson-bright);
+	}
+
+	.suggestion-box .btn {
+		width: 100%;
+		margin-top: 0.25rem;
+	}
+
+	.suggestion-note {
+		margin: 0.25rem 0 0;
+		font-size: 0.8rem;
+		color: #666;
+		letter-spacing: 0.03em;
+		line-height: 1.45;
+		text-align: center;
+	}
+
+	.suggestion-box.is-sent .btn {
+		background: #2a7a3a;
+		border-color: #2a7a3a;
+		box-shadow: none;
+	}
+
+	.range-cta {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		margin-top: 3rem;
+	}
+
+	.range-cta .btn {
+		min-width: min(100%, 280px);
+	}
+
+	/* USP */
+	.usp {
+		background: var(--bgs-black);
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.usp-inner {
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.usp-copy .lead-copy {
+		margin: 0 0 1.75rem;
+		max-width: 32rem;
+	}
+
+	.usp-points {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.usp-points li {
+		position: relative;
+		padding-left: 1.25rem;
+	}
+
+	.usp-points li::before {
+		content: '✦';
+		position: absolute;
+		left: 0;
+		top: 0.2rem;
+		color: var(--bgs-crimson-bright);
+		font-size: 0.7rem;
+	}
+
+	.usp-points strong {
+		display: block;
+		font-family: var(--bgs-font-display);
+		font-size: 1.15rem;
+		font-weight: 400;
+		color: var(--bgs-white);
+		margin-bottom: 0.4rem;
+	}
+
+	.usp-points span {
+		display: block;
+		color: var(--bgs-gray);
+		font-size: 0.95rem;
+		line-height: 1.55;
+	}
+
+	/* Garage wear */
+	.garage {
+		position: relative;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse at 80% 30%, rgba(196, 30, 58, 0.22) 0%, transparent 50%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.garage-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.012) 2px,
+			rgba(255, 255, 255, 0.012) 4px
+		);
+		pointer-events: none;
+	}
+
+	.garage-inner {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 3rem;
+		align-items: center;
+	}
+
+	.garage-copy .lead-copy {
+		margin: 0 0 1.25rem;
+		max-width: 34rem;
+	}
+
+	.garage-copy .btn {
+		margin-top: 0.5rem;
+	}
+
+	.garage-points {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.garage-points li {
+		position: relative;
+		padding-left: 1.25rem;
+	}
+
+	.garage-points li::before {
+		content: '✦';
+		position: absolute;
+		left: 0;
+		top: 0.2rem;
+		color: var(--bgs-crimson-bright);
+		font-size: 0.7rem;
+	}
+
+	.garage-points strong {
+		display: block;
+		font-family: var(--bgs-font-display);
+		font-size: 1.15rem;
+		font-weight: 400;
+		color: var(--bgs-white);
+		margin-bottom: 0.4rem;
+	}
+
+	.garage-points span {
+		display: block;
+		color: var(--bgs-gray);
+		font-size: 0.95rem;
+		line-height: 1.55;
+	}
+
+	/* Reviews */
+	.reviews {
+		background: var(--bgs-charcoal);
+		border-top: 1px solid var(--bgs-gray-dark);
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.reviews-header {
+		margin-bottom: 2.5rem;
+	}
+
+	.reviews-stat {
+		margin: 0 0 0.35rem;
+		font-family: var(--bgs-font-display);
+		font-size: clamp(3rem, 10vw, 5.5rem);
+		line-height: 1;
+		color: var(--bgs-crimson-bright);
+		letter-spacing: 0.04em;
+		text-shadow: 0 0 40px var(--bgs-crimson-glow);
+	}
+
+	.reviews-lede {
+		margin: 1rem auto 0;
+		max-width: 36rem;
+		text-align: center;
+	}
+
+	.reviews-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.review-card {
+		margin: 0;
+		padding: 1.5rem 1.35rem;
+		background: var(--bgs-black);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+	}
+
+	.review-card:hover {
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4), 0 0 24px var(--bgs-crimson-glow);
+		transform: translateY(-4px);
+	}
+
+	.review-stars {
+		color: var(--bgs-crimson-bright);
+		font-size: 1rem;
+		letter-spacing: 0.12em;
+	}
+
+	.review-card blockquote {
+		margin: 0;
+		flex: 1;
+	}
+
+	.review-card blockquote p {
+		margin: 0;
+		color: var(--bgs-gray);
+		font-size: 0.95rem;
+		line-height: 1.6;
+		letter-spacing: 0.02em;
+	}
+
+	.review-card figcaption {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-white);
+	}
+
+	.form-feedback {
+		margin: 0.5rem 0 0;
+		font-size: 0.85rem;
+		letter-spacing: 0.03em;
+		line-height: 1.4;
+	}
+
+	.form-feedback.is-ok {
+		color: #6ecf7a;
+	}
+
+	.form-feedback.is-err {
+		color: var(--bgs-crimson-bright);
+	}
+
+	/* About */
+	.about {
+		background: #0d0d0d;
+		background: var(--bgs-black);
+	}
+
+	.about-inner {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3.5rem;
+		align-items: center;
+	}
+
+	.about-image-wrap {
+		position: relative;
+	}
+
+	.about-image {
+		width: 100%;
+		height: auto;
+		border-radius: 8px;
+		border: 2px solid var(--bgs-gray-dark);
+		display: block;
+		position: relative;
+		z-index: 1;
+	}
+
+	.about-image-accent {
+		position: absolute;
+		bottom: -12px;
+		right: -12px;
+		width: 100%;
+		height: 100%;
+		border: 2px solid var(--bgs-crimson);
+		border-radius: 8px;
+		z-index: 0;
+	}
+
+	.about-content .lead-copy {
+		margin: 0 0 1.25rem;
+	}
+
+	.about-highlights {
+		margin: 1.5rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.about-highlights li {
+		position: relative;
+		padding-left: 1.25rem;
+		margin-bottom: 0.65rem;
+		color: var(--bgs-white);
+		font-size: 0.95rem;
+		font-weight: 400;
+		letter-spacing: 0.03em;
+	}
+
+	.about-highlights li::before {
+		content: '✦';
+		position: absolute;
+		left: 0;
+		color: var(--bgs-crimson-bright);
+		font-size: 0.7rem;
+	}
+
+	/* Connect */
+	.connect {
+		background: #161616;
+		background: var(--bgs-charcoal);
+	}
+
+	.connect-inner {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+	}
+
+	.connect-block .lead-copy {
+		margin: 0 0 1.5rem;
+	}
+
+	.connect-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.newsletter-form {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.newsletter-form input {
+		flex: 1;
+		background: var(--bgs-black);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		padding: 0.85rem 1rem;
+		color: var(--bgs-white);
+		font-family: var(--bgs-font-body);
+		font-size: 0.95rem;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+
+	.newsletter-form input::placeholder {
+		color: #555;
+	}
+
+	.newsletter-form input:focus {
+		border-color: var(--bgs-crimson);
+	}
+
+	.newsletter-form .btn {
+		flex-shrink: 0;
+	}
+
+	.newsletter-note {
+		font-size: 0.8rem !important;
+		color: #555 !important;
+		margin: 0 !important;
+	}
+
+	@media (max-width: 900px) {
+		.hero-inner {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+
+		.subheadline {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.hero-actions {
+			justify-content: center;
+		}
+
+		.hero-visual {
+			order: -1;
+		}
+
+		.hero-logo {
+			width: min(220px, 60%);
+		}
+
+		.collection-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.about-inner {
+			grid-template-columns: 1fr;
+		}
+
+		.usp-inner {
+			grid-template-columns: 1fr;
+		}
+
+		.garage-inner {
+			grid-template-columns: 1fr;
+		}
+
+		.reviews-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.suggestion-inner {
+			grid-template-columns: 1fr;
+		}
+
+		.suggestion-box {
+			transform: none;
+		}
+
+		.connect-inner {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.hero-actions {
+			flex-direction: column;
+		}
+
+		.btn {
+			width: 100%;
+		}
+
+		.newsletter-form {
+			flex-direction: column;
+		}
+	}
+</style>
+
+<script>
+	const poisonGrid = document.getElementById('poison-grid');
+	if (poisonGrid) {
+		const cards = Array.from(poisonGrid.children);
+		for (let i = cards.length - 1; i > 0; i -= 1) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[cards[i], cards[j]] = [cards[j], cards[i]];
+		}
+		for (const card of cards) {
+			poisonGrid.appendChild(card);
+		}
+	}
+
+	const suggestionForm = document.getElementById('suggestion-form');
+	const suggestionFeedback = document.getElementById('suggestion-feedback');
+
+	suggestionForm?.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		const suggestionField = suggestionForm.querySelector('#suggestion');
+		const nameField = suggestionForm.querySelector('#suggestion-name');
+		const emailField = suggestionForm.querySelector('#suggestion-email');
+		const suggestion = suggestionField?.value?.trim();
+		const name = nameField?.value?.trim() || '';
+		const email = emailField?.value?.trim() || '';
+		if (!suggestion) return;
+
+		const btn = suggestionForm.querySelector('.btn');
+		const previous = btn?.textContent || "Chuck It In";
+		if (btn) {
+			btn.textContent = 'Sending…';
+			btn.setAttribute('disabled', 'true');
+		}
+
+		try {
+			const response = await fetch('/api/suggestion', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ suggestion, name, email }),
+			});
+			const data = await response.json();
+			if (!response.ok || !data.ok) {
+				throw new Error(data.message || 'Could not send suggestion.');
+			}
+			suggestionForm.classList.add('is-sent');
+			if (btn) btn.textContent = 'Sent — Thanks';
+			if (suggestionFeedback) {
+				suggestionFeedback.hidden = false;
+				suggestionFeedback.className = 'form-feedback is-ok';
+				suggestionFeedback.textContent = 'Got it — we’ll have a look.';
+			}
+			suggestionForm.reset();
+		} catch (error) {
+			if (btn) {
+				btn.textContent = previous;
+				btn.removeAttribute('disabled');
+			}
+			if (suggestionFeedback) {
+				suggestionFeedback.hidden = false;
+				suggestionFeedback.className = 'form-feedback is-err';
+				suggestionFeedback.textContent =
+					error instanceof Error ? error.message : 'Something went wrong — try again.';
+			}
+		}
+	});
+
+	const newsletterForm = document.getElementById('newsletter-form');
+	const newsletterFeedback = document.getElementById('newsletter-feedback');
+
+	newsletterForm?.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		const emailField = newsletterForm.querySelector('#email');
+		const email = emailField?.value?.trim();
+		if (!email) return;
+
+		const btn = newsletterForm.querySelector('.btn');
+		const previous = btn?.textContent || "I'm In";
+		if (btn) {
+			btn.textContent = 'Joining…';
+			btn.setAttribute('disabled', 'true');
+		}
+
+		try {
+			const response = await fetch('/api/newsletter', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email }),
+			});
+			const data = await response.json();
+			if (!response.ok || !data.ok) {
+				throw new Error(data.message || 'Could not join the list.');
+			}
+			if (btn) btn.textContent = "You're On The List";
+			newsletterForm.classList.add('is-sent');
+			if (newsletterFeedback) {
+				newsletterFeedback.hidden = false;
+				newsletterFeedback.className = 'form-feedback is-ok';
+				newsletterFeedback.textContent = 'Welcome aboard — watch your inbox for drops.';
+			}
+			newsletterForm.reset();
+		} catch (error) {
+			if (btn) {
+				btn.textContent = previous;
+				btn.removeAttribute('disabled');
+			}
+			if (newsletterFeedback) {
+				newsletterFeedback.hidden = false;
+				newsletterFeedback.className = 'form-feedback is-err';
+				newsletterFeedback.textContent =
+					error instanceof Error ? error.message : 'Something went wrong — try again.';
+			}
+		}
+	});
+</script>

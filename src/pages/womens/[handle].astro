@@ -1,0 +1,20 @@
+---
+import DepartmentCatalog from '../../components/DepartmentCatalog.astro';
+import { getCollectionLabel } from '../../data/navigation';
+
+export const prerender = false;
+
+const handle = Astro.params.handle ?? '';
+const displayLabel = getCollectionLabel('womens', handle) || 'Collection';
+---
+
+<DepartmentCatalog
+	department="womens"
+	typeHandle={handle}
+	title={`Women's ${displayLabel} | Bad Girls Should`}
+	eyebrow={`Women's · ${displayLabel}`}
+	heading={displayLabel}
+	description={`Shop women's ${displayLabel.toLowerCase()} — alt fashion with bite, from everyday fits to curve sizes.`}
+	breadcrumbLabel={displayLabel}
+	emptyMessage={`No women's ${displayLabel.toLowerCase()} yet — add products to Women's + ${displayLabel} collections in Shopify.`}
+/>

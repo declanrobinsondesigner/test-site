@@ -1,0 +1,243 @@
+---
+import type { Product } from '../data/products';
+import {
+	getDisplayPrice,
+	getCompareAtDisplayPrice,
+	getFeaturedImage,
+	getProductHref,
+	getSizeBadgeLabel,
+	resolveImageSrc,
+	resolveImageWidth,
+	resolveImageHeight,
+} from '../data/products';
+
+interface Props {
+	products: Product[];
+	emptyMessage?: string;
+}
+
+const {
+	products,
+	emptyMessage = 'More pieces dropping soon — check back or message us on Facebook.',
+} = Astro.props;
+---
+
+{
+	products.length > 0 ? (
+		<div class="catalog-grid">
+			{products.map((product) => {
+				const image = getFeaturedImage(product);
+				const compareAt = getCompareAtDisplayPrice(product);
+				const src = resolveImageSrc(image.src);
+				const sizeBadge = getSizeBadgeLabel(product.sizes);
+				return (
+					<a class="product-card" href={getProductHref(product)}>
+						<div class="product-card-media">
+							{sizeBadge && <span class="size-badge">{sizeBadge}</span>}
+							<img
+								src={src}
+								width={resolveImageWidth(image.src)}
+								height={resolveImageHeight(image.src)}
+								alt={image.alt}
+								loading="lazy"
+							/>
+						</div>
+						<div class="product-card-body">
+							<span class="product-card-tag">{product.productType}</span>
+							<h2>{product.title}</h2>
+							<p>{product.description}</p>
+							<div class="product-card-meta">
+								<span class="product-card-price">
+									{getDisplayPrice(product)}
+									{compareAt && <s class="product-card-compare">{compareAt}</s>}
+								</span>
+								<span class="product-card-cta">Shop →</span>
+							</div>
+						</div>
+					</a>
+				);
+			})}
+		</div>
+	) : (
+		<div class="catalog-empty">
+			<p>{emptyMessage}</p>
+		</div>
+	)
+}
+
+<style>
+	.catalog-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.product-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		background: var(--bgs-charcoal);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		text-decoration: none;
+		overflow: hidden;
+		transition:
+			transform 0.25s,
+			border-color 0.25s,
+			box-shadow 0.25s;
+	}
+
+	.product-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(135deg, var(--bgs-crimson-glow) 0%, transparent 55%);
+		opacity: 0;
+		transition: opacity 0.3s;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	.product-card:hover {
+		transform: translateY(-6px);
+		border-color: var(--bgs-crimson);
+		box-shadow:
+			0 12px 40px rgba(0, 0, 0, 0.5),
+			0 0 30px var(--bgs-crimson-glow);
+	}
+
+	.product-card:hover::before {
+		opacity: 1;
+	}
+
+	.product-card-media {
+		position: relative;
+		aspect-ratio: 1;
+		background: #121212;
+		overflow: hidden;
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.size-badge {
+		position: absolute;
+		top: 0.85rem;
+		left: 0.85rem;
+		z-index: 2;
+		padding: 0.35rem 0.65rem;
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		border-radius: 3px;
+		box-shadow: 0 4px 16px var(--bgs-crimson-glow);
+	}
+
+	.product-card-media img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.55s ease;
+	}
+
+	.product-card:hover .product-card-media img {
+		transform: scale(1.05);
+	}
+
+	.product-card-body {
+		position: relative;
+		z-index: 2;
+		padding: 1.35rem 1.35rem 1.5rem;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+
+	.product-card-tag {
+		display: inline-block;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--bgs-crimson-bright);
+		margin-bottom: 0.65rem;
+	}
+
+	.product-card-body h2 {
+		font-family: var(--bgs-font-display);
+		font-size: 1.2rem;
+		color: var(--bgs-white);
+		margin: 0 0 0.65rem;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+
+	.product-card-body p {
+		margin: 0 0 1.25rem;
+		color: var(--bgs-gray);
+		font-size: 0.9rem;
+		line-height: 1.55;
+		flex: 1;
+	}
+
+	.product-card-meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.product-card-price {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-size: 1.05rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--bgs-white);
+	}
+
+	.product-card-compare {
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--bgs-gray);
+	}
+
+	.product-card-cta {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-crimson-bright);
+	}
+
+	.catalog-empty {
+		text-align: center;
+		padding: 3.5rem 1.5rem;
+		border: 1px dashed var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-charcoal);
+	}
+
+	.catalog-empty p {
+		margin: 0;
+		color: var(--bgs-gray);
+		line-height: 1.6;
+		max-width: 28rem;
+		margin-inline: auto;
+	}
+
+	@media (max-width: 900px) {
+		.catalog-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 600px) {
+		.catalog-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

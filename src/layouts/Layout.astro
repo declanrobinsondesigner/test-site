@@ -1,0 +1,91 @@
+---
+interface Props {
+	title?: string;
+}
+
+const {
+	title = 'Bad Girls Should | XL+ Alternative Attire — Rockabilly & Gothic · Grimsby',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta
+			name="description"
+			content="Bad Girls Should — XL+ alternative attire from Grimsby. Graphic tees, dresses, shirts, hoodies, and rockabilly brands in bigger fits, plus bowling bags and alt accessories."
+		/>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rye&display=swap"
+			rel="stylesheet"
+		/>
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--bgs-black: #0d0d0d;
+		--bgs-charcoal: #161616;
+		--bgs-charcoal-light: #1f1f1f;
+		--bgs-crimson: #c41e3a;
+		--bgs-crimson-bright: #e8223a;
+		--bgs-crimson-glow: rgba(196, 30, 58, 0.35);
+		--bgs-white: #f5f5f5;
+		--bgs-gray: #888888;
+		--bgs-gray-dark: #333333;
+		--bgs-font-display: 'Rye', Georgia, serif;
+		--bgs-font-body: 'Oswald', system-ui, sans-serif;
+	}
+
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		min-height: 100%;
+		background: #0d0d0d;
+		font-family: 'Oswald', system-ui, sans-serif;
+		color: #f5f5f5;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	/* Continuous crimson wash — one layer for the whole site, no section seams */
+	body::before {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		background-color: #0d0d0d;
+		background-image:
+			radial-gradient(ellipse 90% 55% at 78% 6%, rgba(196, 30, 58, 0.32) 0%, transparent 58%),
+			radial-gradient(ellipse 70% 45% at 12% 28%, rgba(196, 30, 58, 0.14) 0%, transparent 52%),
+			radial-gradient(ellipse 75% 50% at 88% 55%, rgba(196, 30, 58, 0.16) 0%, transparent 55%),
+			radial-gradient(ellipse 65% 40% at 18% 82%, rgba(196, 30, 58, 0.12) 0%, transparent 50%);
+	}
+
+	body > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	a {
+		color: inherit;
+	}
+</style>

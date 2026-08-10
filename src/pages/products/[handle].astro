@@ -1,0 +1,1170 @@
+---
+/**
+ * Master product template — every catalogue product uses this page.
+ * On-demand so new Shopify products work without a rebuild.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import {
+	getBreadcrumbTrail,
+	getCompareAtDisplayPrice,
+	getCustomMetafields,
+	getDisplayPrice,
+	resolveImageHeight,
+	resolveImageSrc,
+	resolveImageWidth,
+} from '../../data/products';
+import { getCatalogueProductByHandle } from '../../data/catalogue';
+import { getRelatedCategoryCards, type Department } from '../../data/navigation';
+
+export const prerender = false;
+
+const { handle } = Astro.params;
+const product = handle ? await getCatalogueProductByHandle(handle) : undefined;
+
+if (!product) {
+	return Astro.redirect('/range');
+}
+
+const gallery = product.images;
+const sizes = product.sizes;
+const details = product.details;
+const customFields = getCustomMetafields(product);
+const breadcrumb = getBreadcrumbTrail(product);
+const displayPrice = getDisplayPrice(product);
+const compareAtPrice = getCompareAtDisplayPrice(product);
+const featuredSrc = resolveImageSrc(gallery[0].src);
+const sizeGuide = product.sizeGuide;
+const defaultSizeIndex = Math.min(2, Math.max(0, sizes.length - 1));
+const department: Department = product.collections.includes('womens') ? 'womens' : 'mens';
+const departmentLabel =
+	department === 'womens' ? "Women's" : product.collections.includes('mens') ? "Men's" : product.vendor;
+const currentTypeHandle = product.collections.find((collection) =>
+	[
+		'jumpsuits',
+		't-shirts',
+		'zip-up-hoodies',
+		'jackets',
+		'bowling-shirts',
+		'worker-shirts',
+		'jumpers',
+		'cardigans',
+		'skirts',
+		'tops',
+		'leggings',
+		'trousers',
+		'shorts',
+		'bags',
+		'wallets',
+		'chains',
+		'belts',
+		'shoes',
+		'dresses',
+	].includes(collection),
+);
+const relatedCards = getRelatedCategoryCards(department, currentTypeHandle, 3);
+const variantsJson = JSON.stringify(product.variants ?? []);
+---
+
+<Layout title={`${product.title} | Bad Girls Should`}>
+	<Header cartHref="/cart" />
+
+	<main>
+		<section class="product">
+			<div class="product-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					{
+						breadcrumb.map((crumb, i) => (
+							<>
+								{i > 0 && <span aria-hidden="true">/</span>}
+								{crumb.href ? (
+									<a href={crumb.href}>{crumb.label}</a>
+								) : (
+									<span aria-current="page">{crumb.label}</span>
+								)}
+							</>
+						))
+					}
+				</nav>
+
+				<div class="product-layout">
+					<div class="product-gallery">
+						<div class="product-frame">
+							<img
+								id="gallery-main"
+								src={featuredSrc}
+								width={resolveImageWidth(gallery[0].src)}
+								height={resolveImageHeight(gallery[0].src)}
+								alt={gallery[0].alt}
+								class="product-image"
+								data-fit={gallery[0].fit ?? 'cover'}
+							/>
+						</div>
+						{
+							gallery.length > 1 && (
+								<div class="gallery-thumbs" role="list">
+									{gallery.map((item, i) => (
+										<button
+											class:list={[
+												'gallery-thumb',
+												{ 'is-active': i === 0, 'is-contain': item.fit === 'contain' },
+											]}
+											type="button"
+											data-gallery-src={resolveImageSrc(item.src)}
+											data-gallery-alt={item.alt}
+											data-gallery-fit={item.fit ?? 'cover'}
+											aria-label={`Show ${item.label ?? `image ${i + 1}`}`}
+											aria-pressed={i === 0 ? 'true' : 'false'}
+										>
+											<img
+												src={resolveImageSrc(item.src)}
+												width="120"
+												height="120"
+												alt=""
+											/>
+											<span>{item.label ?? `View ${i + 1}`}</span>
+										</button>
+									))}
+								</div>
+							)
+						}
+						{
+							product.tags.length > 0 && (
+								<p class="gallery-caption">{product.tags.slice(0, 3).join(' · ')}</p>
+							)
+						}
+					</div>
+
+					<div class="product-info">
+						<p class="eyebrow">
+							{departmentLabel} · {product.productType}
+							{product.tags.includes('BNWT') ? ' · BNWT' : ''}
+						</p>
+						<h1>{product.title}</h1>
+						<p class="price">
+							{displayPrice}
+							{compareAtPrice && <s class="compare-price">{compareAtPrice}</s>}
+						</p>
+						<p class="condition">{product.vendor} · Ships from Grimsby</p>
+						<p class="lede" set:html={product.descriptionHtml ?? product.description} />
+
+						{
+							sizes.length > 0 && (
+								<div class="size-block">
+									<div class="size-header">
+										<span class="size-label">Select Size</span>
+										{sizeGuide && (
+											<a class="size-guide" href="#size-guide">
+												Size guide ↓
+											</a>
+										)}
+									</div>
+									<div class="size-options" role="radiogroup" aria-label="Size">
+										{sizes.map((size, i) => (
+											<label class="size-option">
+												<input
+													type="radio"
+													name="size"
+													value={size}
+													checked={i === defaultSizeIndex}
+													data-size-input
+												/>
+												<span>{size}</span>
+											</label>
+										))}
+									</div>
+								</div>
+							)
+						}
+
+						<div class="product-actions">
+							<button
+								class="btn btn-primary"
+								type="button"
+								data-add-to-cart
+								data-handle={product.handle}
+								data-title={product.title}
+								data-price={product.price}
+								data-currency={product.currencyCode}
+								data-image={featuredSrc}
+								data-image-alt={gallery[0].alt}
+								data-variants={variantsJson}
+							>
+								Add to Cart
+							</button>
+							<a class="btn btn-outline" href="/cart">View Cart</a>
+						</div>
+						<p class="cart-feedback" data-cart-feedback hidden></p>
+
+						{
+							details.length > 0 && (
+								<ul class="product-details">
+									{details.map((item) => (
+										<li>{item}</li>
+									))}
+								</ul>
+							)
+						}
+
+						{
+							customFields.length > 0 && (
+								<section class="metafields" aria-label="Custom product fields">
+									<p class="metafields-eyebrow">Product Specs</p>
+									<dl class="metafields-list">
+										{customFields.map((field) => (
+											<div class="metafield-row">
+												<dt>{field.label ?? field.key.replace(/_/g, ' ')}</dt>
+												<dd>{field.value}</dd>
+											</div>
+										))}
+									</dl>
+								</section>
+							)
+						}
+
+						<p class="ship-note">
+							Ships from Grimsby · Catch us at Summer events throughout the UK for try-ons.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		{
+			sizeGuide && (
+				<section class="section size-guide-section" id="size-guide">
+					<div class="container">
+						<div class="section-header">
+							<p class="section-eyebrow">{sizeGuide.eyebrow ?? 'Size Guide · cm'}</p>
+							<h2 class="section-title">Size Guide</h2>
+						</div>
+
+						<div class="size-guide-layout">
+							{sizeGuide.rows.length > 0 && (
+								<div class="size-table-wrap">
+									<table class="size-table">
+										<thead>
+											<tr>
+												<th scope="col">Measurement</th>
+												{sizes.map((size) => (
+													<th scope="col">{size}</th>
+												))}
+											</tr>
+										</thead>
+										<tbody>
+											{sizeGuide.rows.map((row) => (
+												<tr>
+													<th scope="row">{row.label}</th>
+													{row.values.map((value) => (
+														<td>{value}</td>
+													))}
+												</tr>
+											))}
+										</tbody>
+									</table>
+									<p class="size-note">
+										Measurements in centimetres. Chest is half-chest / pit-to-pit style.
+									</p>
+								</div>
+							)}
+
+							<button
+								class="size-guide-figure"
+								type="button"
+								data-lightbox-open
+								data-lightbox-src={resolveImageSrc(sizeGuide.image)}
+								data-lightbox-alt={sizeGuide.imageAlt}
+								aria-label="Open size guide image full size"
+							>
+								<img
+									src={resolveImageSrc(sizeGuide.image)}
+									width={resolveImageWidth(sizeGuide.image, 600)}
+									height={resolveImageHeight(sizeGuide.image, 800)}
+									alt={sizeGuide.imageAlt}
+									loading="lazy"
+								/>
+								<span class="size-guide-zoom">Click to enlarge</span>
+							</button>
+						</div>
+					</div>
+				</section>
+			)
+		}
+
+		<dialog class="lightbox" data-lightbox aria-label="Enlarged size guide">
+			<button class="lightbox-close" type="button" data-lightbox-close aria-label="Close">
+				×
+			</button>
+			<img data-lightbox-img src="" alt="" />
+		</dialog>
+
+		<section class="section related">
+			<div class="container">
+				<div class="section-header">
+					<p class="section-eyebrow">Keep Looking</p>
+					<h2 class="section-title">Keep the Edge Going</h2>
+				</div>
+				<div class="related-grid">
+					{
+						relatedCards.map((card) => (
+							<a class="related-card" href={card.href}>
+								<span class="related-tag">{card.tag}</span>
+								<h3>{card.title}</h3>
+								<p>{card.description}</p>
+								<span class="related-cta">{card.cta}</span>
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.product {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse at 20% 30%, rgba(196, 30, 58, 0.22) 0%, transparent 50%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.product-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.product-layout {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.05fr 0.95fr;
+		gap: 3.5rem;
+		align-items: start;
+	}
+
+	.product-gallery {
+		position: sticky;
+		top: 6rem;
+	}
+
+	.product-frame {
+		position: relative;
+		background: var(--bgs-charcoal);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+		animation: frame-in 0.7s ease-out both;
+	}
+
+	.product-frame::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: 8px;
+		box-shadow: inset 0 0 0 1px rgba(196, 30, 58, 0.25);
+		pointer-events: none;
+	}
+
+	.product-image {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		object-position: center;
+		background: #141414;
+	}
+
+	.product-image[data-fit='contain'] {
+		object-fit: contain;
+		padding: 1.25rem;
+	}
+
+	.gallery-thumbs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.65rem;
+		margin-top: 0.85rem;
+	}
+
+	.gallery-thumb {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 0;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 6px;
+		overflow: hidden;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-gray);
+		cursor: pointer;
+		transition:
+			border-color 0.2s,
+			color 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.gallery-thumb img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		background: #141414;
+	}
+
+	.gallery-thumb.is-contain img {
+		object-fit: contain;
+		padding: 0.35rem;
+	}
+
+	.gallery-thumb span {
+		padding: 0 0.4rem 0.45rem;
+		font-size: 0.65rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		text-align: center;
+	}
+
+	.gallery-thumb:hover,
+	.gallery-thumb.is-active {
+		border-color: var(--bgs-crimson);
+		color: var(--bgs-crimson-bright);
+		box-shadow: 0 0 16px var(--bgs-crimson-glow);
+	}
+
+	.gallery-caption {
+		margin: 1rem 0 0;
+		text-align: center;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--bgs-crimson-bright);
+	}
+
+	.product-info {
+		animation: info-in 0.7s ease-out 0.12s both;
+	}
+
+	.eyebrow,
+	.section-eyebrow,
+	.metafields-eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+		line-height: 1.15;
+		margin: 0 0 0.85rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.price {
+		font-family: var(--bgs-font-body);
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		color: var(--bgs-white);
+		margin: 0 0 0.35rem;
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.65rem;
+	}
+
+	.compare-price {
+		font-size: 1rem;
+		font-weight: 500;
+		color: var(--bgs-gray);
+	}
+
+	.condition {
+		margin: 0 0 1.25rem;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--bgs-gray);
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0 0 2rem;
+		max-width: 34rem;
+		letter-spacing: 0.02em;
+	}
+
+	.size-block {
+		margin-bottom: 1.75rem;
+	}
+
+	.size-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-bottom: 0.85rem;
+	}
+
+	.size-label {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--bgs-white);
+	}
+
+	.size-guide {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--bgs-crimson-bright);
+		text-decoration: none;
+	}
+
+	.size-guide:hover {
+		color: var(--bgs-white);
+	}
+
+	.size-options {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.size-option {
+		cursor: pointer;
+	}
+
+	.size-option input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.size-option span {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 3rem;
+		height: 2.75rem;
+		padding: 0 0.85rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-white);
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		transition:
+			border-color 0.2s,
+			background 0.2s,
+			color 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.size-option:hover span {
+		border-color: var(--bgs-white);
+	}
+
+	.size-option input:checked + span {
+		border-color: var(--bgs-crimson);
+		background: rgba(196, 30, 58, 0.15);
+		color: var(--bgs-crimson-bright);
+		box-shadow: 0 0 18px var(--bgs-crimson-glow);
+	}
+
+	.size-option input:focus-visible + span {
+		outline: 2px solid var(--bgs-crimson-bright);
+		outline-offset: 2px;
+	}
+
+	.product-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		margin-bottom: 0.85rem;
+	}
+
+	.cart-feedback {
+		margin: 0 0 1.5rem;
+		font-size: 0.85rem;
+		letter-spacing: 0.06em;
+		color: var(--bgs-crimson-bright);
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.75rem;
+		font-family: var(--bgs-font-body);
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		border-radius: 4px;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition:
+			transform 0.15s,
+			box-shadow 0.2s,
+			background 0.2s,
+			border-color 0.2s;
+	}
+
+	.btn-primary {
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 4px 20px rgba(196, 30, 58, 0.35);
+	}
+
+	.btn-primary:hover {
+		background: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson-bright);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 28px var(--bgs-crimson-glow);
+	}
+
+	.btn-outline {
+		background: transparent;
+		color: var(--bgs-white);
+		border-color: var(--bgs-gray-dark);
+	}
+
+	.btn-outline:hover {
+		border-color: var(--bgs-white);
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	.product-details {
+		margin: 0 0 1.5rem;
+		padding: 1.5rem 0 0;
+		list-style: none;
+		border-top: 1px solid var(--bgs-gray-dark);
+	}
+
+	.product-details li {
+		position: relative;
+		padding-left: 1.25rem;
+		margin-bottom: 0.7rem;
+		color: var(--bgs-white);
+		font-size: 0.95rem;
+		line-height: 1.5;
+		letter-spacing: 0.02em;
+	}
+
+	.product-details li::before {
+		content: '✦';
+		position: absolute;
+		left: 0;
+		color: var(--bgs-crimson-bright);
+		font-size: 0.7rem;
+	}
+
+	.metafields {
+		margin: 0 0 1.5rem;
+		padding: 1.25rem 0 0;
+		border-top: 1px solid var(--bgs-gray-dark);
+	}
+
+	.metafields-list {
+		margin: 0;
+	}
+
+	.metafield-row {
+		display: grid;
+		grid-template-columns: 8.5rem 1fr;
+		gap: 0.75rem;
+		padding: 0.55rem 0;
+		border-bottom: 1px solid rgba(51, 51, 51, 0.7);
+	}
+
+	.metafield-row:last-child {
+		border-bottom: none;
+	}
+
+	.metafield-row dt {
+		margin: 0;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.metafield-row dd {
+		margin: 0;
+		font-size: 0.95rem;
+		color: var(--bgs-white);
+		line-height: 1.45;
+	}
+
+	.ship-note {
+		margin: 0;
+		font-size: 0.8rem;
+		color: #666;
+		letter-spacing: 0.04em;
+		line-height: 1.5;
+	}
+
+	.section {
+		padding: 5rem 0;
+	}
+
+	.size-guide-section {
+		background: var(--bgs-charcoal);
+		border-top: 1px solid var(--bgs-gray-dark);
+	}
+
+	.section-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.section-title {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		color: var(--bgs-white);
+		margin: 0;
+		font-weight: 400;
+		line-height: 1.2;
+	}
+
+	.size-guide-layout {
+		display: grid;
+		grid-template-columns: 1.15fr 0.85fr;
+		gap: 2rem;
+		align-items: start;
+	}
+
+	.size-table-wrap {
+		overflow-x: auto;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-black);
+	}
+
+	.size-table {
+		width: 100%;
+		border-collapse: collapse;
+		min-width: 520px;
+	}
+
+	.size-table th,
+	.size-table td {
+		padding: 0.85rem 0.75rem;
+		text-align: center;
+		font-size: 0.85rem;
+		border-bottom: 1px solid var(--bgs-gray-dark);
+	}
+
+	.size-table thead th {
+		background: #121212;
+		color: var(--bgs-crimson-bright);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-weight: 600;
+		font-size: 0.75rem;
+	}
+
+	.size-table tbody th {
+		text-align: left;
+		color: var(--bgs-white);
+		font-weight: 500;
+		padding-left: 1rem;
+		white-space: nowrap;
+	}
+
+	.size-table td {
+		color: var(--bgs-gray);
+	}
+
+	.size-table tbody tr:last-child th,
+	.size-table tbody tr:last-child td {
+		border-bottom: none;
+	}
+
+	.size-note {
+		margin: 0.85rem 0 0;
+		font-size: 0.8rem;
+		color: #666;
+		letter-spacing: 0.03em;
+	}
+
+	.size-guide-figure {
+		position: relative;
+		display: block;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		overflow: hidden;
+		background: #d8c9a8;
+		cursor: zoom-in;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.2s,
+			transform 0.2s;
+	}
+
+	.size-guide-figure:hover {
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 0 24px var(--bgs-crimson-glow);
+		transform: translateY(-2px);
+	}
+
+	.size-guide-figure img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.size-guide-zoom {
+		position: absolute;
+		right: 0.75rem;
+		bottom: 0.75rem;
+		padding: 0.4rem 0.7rem;
+		background: rgba(13, 13, 13, 0.85);
+		color: var(--bgs-white);
+		font-family: var(--bgs-font-body);
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		border-radius: 4px;
+		pointer-events: none;
+	}
+
+	.lightbox {
+		width: min(96vw, 1100px);
+		max-height: 92vh;
+		margin: auto;
+		padding: 0;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-black);
+		overflow: auto;
+	}
+
+	.lightbox::backdrop {
+		background: rgba(0, 0, 0, 0.82);
+	}
+
+	.lightbox img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.lightbox-close {
+		position: sticky;
+		top: 0.65rem;
+		float: right;
+		margin: 0.65rem 0.65rem 0 0;
+		width: 2.4rem;
+		height: 2.4rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		background: rgba(13, 13, 13, 0.9);
+		color: var(--bgs-white);
+		font-size: 1.5rem;
+		line-height: 1;
+		cursor: pointer;
+		z-index: 2;
+	}
+
+	.lightbox-close:hover {
+		border-color: var(--bgs-crimson);
+		color: var(--bgs-crimson-bright);
+	}
+
+	.related {
+		background: var(--bgs-black);
+		border-top: 1px solid var(--bgs-gray-dark);
+	}
+
+	.related-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
+	}
+
+	.related-card {
+		position: relative;
+		background: var(--bgs-charcoal);
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		padding: 1.75rem 1.5rem;
+		text-decoration: none;
+		overflow: hidden;
+		transition:
+			transform 0.25s,
+			border-color 0.25s,
+			box-shadow 0.25s;
+	}
+
+	.related-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(135deg, var(--bgs-crimson-glow) 0%, transparent 60%);
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+
+	.related-card:hover {
+		transform: translateY(-6px);
+		border-color: var(--bgs-crimson);
+		box-shadow:
+			0 12px 40px rgba(0, 0, 0, 0.5),
+			0 0 30px var(--bgs-crimson-glow);
+	}
+
+	.related-card:hover::before {
+		opacity: 1;
+	}
+
+	.related-tag {
+		position: relative;
+		display: inline-block;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--bgs-crimson-bright);
+		margin-bottom: 0.75rem;
+	}
+
+	.related-card h3 {
+		position: relative;
+		font-family: var(--bgs-font-display);
+		font-size: 1.2rem;
+		color: var(--bgs-white);
+		margin: 0 0 0.65rem;
+		font-weight: 400;
+		line-height: 1.3;
+	}
+
+	.related-card p {
+		position: relative;
+		margin: 0 0 1.1rem;
+		color: var(--bgs-gray);
+		font-size: 0.9rem;
+		line-height: 1.55;
+	}
+
+	.related-cta {
+		position: relative;
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-crimson-bright);
+	}
+
+	@keyframes frame-in {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes info-in {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 900px) {
+		.product-layout,
+		.size-guide-layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.product-gallery {
+			position: static;
+		}
+
+		.related-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.metafield-row {
+			grid-template-columns: 1fr;
+			gap: 0.25rem;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.product-actions {
+			flex-direction: column;
+		}
+
+		.btn {
+			width: 100%;
+		}
+	}
+</style>
+
+<script>
+	import { addToCart } from '../../scripts/cart';
+
+	const main = document.getElementById('gallery-main');
+	const thumbs = document.querySelectorAll('.gallery-thumb');
+	const lightbox = document.querySelector('[data-lightbox]');
+	const lightboxImg = document.querySelector('[data-lightbox-img]');
+	const lightboxOpen = document.querySelector('[data-lightbox-open]');
+	const lightboxClose = document.querySelector('[data-lightbox-close]');
+	const addBtn = document.querySelector('[data-add-to-cart]');
+	const feedback = document.querySelector('[data-cart-feedback]');
+
+	thumbs.forEach((thumb) => {
+		thumb.addEventListener('click', () => {
+			const src = thumb.getAttribute('data-gallery-src');
+			const alt = thumb.getAttribute('data-gallery-alt');
+			const fit = thumb.getAttribute('data-gallery-fit') || 'cover';
+			if (!main || !src) return;
+
+			main.setAttribute('src', src);
+			main.setAttribute('data-fit', fit);
+			if (alt) main.setAttribute('alt', alt);
+
+			thumbs.forEach((btn) => {
+				btn.classList.remove('is-active');
+				btn.setAttribute('aria-pressed', 'false');
+			});
+			thumb.classList.add('is-active');
+			thumb.setAttribute('aria-pressed', 'true');
+		});
+	});
+
+	const openLightbox = () => {
+		if (!(lightbox instanceof HTMLDialogElement) || !(lightboxImg instanceof HTMLImageElement)) return;
+		const src = lightboxOpen?.getAttribute('data-lightbox-src');
+		const alt = lightboxOpen?.getAttribute('data-lightbox-alt') || '';
+		if (!src) return;
+		lightboxImg.src = src;
+		lightboxImg.alt = alt;
+		lightbox.showModal();
+	};
+
+	const closeLightbox = () => {
+		if (lightbox instanceof HTMLDialogElement) lightbox.close();
+	};
+
+	lightboxOpen?.addEventListener('click', openLightbox);
+	lightboxClose?.addEventListener('click', closeLightbox);
+	lightbox?.addEventListener('click', (event) => {
+		if (event.target === lightbox) closeLightbox();
+	});
+
+	addBtn?.addEventListener('click', () => {
+		if (!(addBtn instanceof HTMLElement)) return;
+		const sizeInput = document.querySelector<HTMLInputElement>('input[name="size"]:checked');
+		const size = sizeInput?.value || 'One Size';
+		let price = Number(addBtn.dataset.price || '0');
+		let merchandiseId: string | undefined;
+
+		try {
+			const variants = JSON.parse(addBtn.dataset.variants || '[]') as Array<{
+				id: string;
+				size: string;
+				price: number;
+			}>;
+			const match = variants.find((variant) => variant.size === size) || variants[0];
+			if (match) {
+				merchandiseId = match.id;
+				price = match.price;
+			}
+		} catch {
+			/* local products may have no variants */
+		}
+
+		addToCart({
+			handle: addBtn.dataset.handle || '',
+			title: addBtn.dataset.title || 'Product',
+			size,
+			price,
+			currencyCode: 'GBP',
+			imageSrc: addBtn.dataset.image || '',
+			imageAlt: addBtn.dataset.imageAlt || '',
+			merchandiseId,
+			quantity: 1,
+		});
+
+		if (feedback instanceof HTMLElement) {
+			feedback.hidden = false;
+			feedback.textContent = `Added ${size} to cart — view cart when you’re ready.`;
+		}
+	});
+</script>

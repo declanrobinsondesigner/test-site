@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getCatalogueByVendorSlug } from '../../data/catalogue';
+import { paginate, parsePageParam } from '../../data/pagination';
+import { resolveBrandLabel } from '../../data/navigation';
+
+export const prerender = false;
+
+const handle = Astro.params.handle ?? '';
+const { vendor, products } = await getCatalogueByVendorSlug(handle);
+const brandName = vendor || resolveBrandLabel(handle, []);
+const page = parsePageParam(Astro.url.searchParams.get('page'));
+const paged = paginate(products, page);
+const pathname = `/brands/${handle}`;
+---
+
+<Layout title={`${brandName} | Bad Girls Should`}>
+	<Header />
+
+	<main>
+		<section class="catalog">
+			<div class="catalog-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<a href="/brands">Brands</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">{brandName}</span>
+				</nav>
+
+				<header class="catalog-header">
+					<p class="eyebrow">Brand</p>
+					<h1>{brandName}</h1>
+					<p class="lede">
+						Everything we currently stock from {brandName}. Products appear here when their Shopify
+						Vendor matches this brand.
+					</p>
+				</header>
+
+				<ProductGrid
+					products={paged.items}
+					emptyMessage={`No ${brandName} pieces online yet — set the Vendor field on products in Shopify and publish them to the Storefront channel.`}
+				/>
+				<Pagination result={paged} pathname={pathname} searchParams={Astro.url.searchParams} />
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.catalog {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		min-height: 70vh;
+		background:
+			radial-gradient(ellipse at 75% 10%, rgba(196, 30, 58, 0.2) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.catalog-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.catalog-header {
+		position: relative;
+		max-width: 48rem;
+		margin-bottom: 3rem;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.15;
+		margin: 0 0 1rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0;
+		letter-spacing: 0.02em;
+	}
+</style>

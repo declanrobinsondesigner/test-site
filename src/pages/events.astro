@@ -1,0 +1,237 @@
+---
+/**
+ * Events page — content edited by the client in Shopify:
+ * Admin → Content → Pages → create/edit page with handle "events"
+ * Publish it to the Storefront / Headless sales channel.
+ */
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { fetchShopifyPage } from '../lib/shopify';
+
+const shopifyPage = await fetchShopifyPage('events');
+const title = shopifyPage?.title?.trim() || 'Events';
+const bodyHtml = shopifyPage?.body?.trim() || '';
+const hasShopifyContent = Boolean(bodyHtml);
+---
+
+<Layout title={`${title} | Bad Girls Should`}>
+	<Header />
+
+	<main>
+		<section class="events">
+			<div class="events-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">Events</span>
+				</nav>
+
+				<header class="events-header">
+					<p class="eyebrow">On The Road</p>
+					<h1>{title}</h1>
+					{
+						!hasShopifyContent && (
+							<p class="lede">
+								Summer events throughout the UK — catch Bad Girls Should for try-ons, new drops,
+								and the full rack in person.
+							</p>
+						)
+					}
+				</header>
+
+				{
+					hasShopifyContent ? (
+						<article class="events-body" set:html={bodyHtml} />
+					) : (
+						<div class="events-empty">
+							<p>
+								Dates for Summer events throughout the UK land here — markets, weekenders, and
+								try-on days. Follow along on Facebook for the latest stall updates in the meantime.
+							</p>
+							<a
+								class="btn btn-primary"
+								href="https://www.facebook.com/people/Bad-Girls-Should/100095156064533/"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Facebook Updates
+							</a>
+						</div>
+					)
+				}
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.events {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		min-height: 70vh;
+		background:
+			radial-gradient(ellipse at 75% 10%, rgba(196, 30, 58, 0.2) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.events-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.events-header {
+		position: relative;
+		max-width: 42rem;
+		margin-bottom: 2.5rem;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.15;
+		margin: 0 0 1rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0;
+		letter-spacing: 0.02em;
+	}
+
+	.events-body {
+		position: relative;
+		max-width: 46rem;
+		color: var(--bgs-gray);
+		font-size: 1.05rem;
+		line-height: 1.7;
+	}
+
+	.events-body :global(h2),
+	.events-body :global(h3) {
+		font-family: var(--bgs-font-display);
+		color: var(--bgs-white);
+		font-weight: 400;
+		margin: 2rem 0 0.75rem;
+	}
+
+	.events-body :global(p) {
+		margin: 0 0 1rem;
+	}
+
+	.events-body :global(ul),
+	.events-body :global(ol) {
+		margin: 0 0 1.25rem;
+		padding-left: 1.25rem;
+	}
+
+	.events-body :global(li) {
+		margin-bottom: 0.45rem;
+	}
+
+	.events-body :global(a) {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.events-body :global(strong) {
+		color: var(--bgs-white);
+	}
+
+	.events-empty {
+		position: relative;
+		max-width: 40rem;
+		padding: 1.75rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-gray);
+		line-height: 1.65;
+	}
+
+	.events-empty p {
+		margin: 0 0 1.25rem;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.85rem 1.4rem;
+		border-radius: 4px;
+		text-decoration: none;
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+	}
+
+	.btn-primary {
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		border: 1px solid var(--bgs-crimson);
+	}
+
+	.btn-primary:hover {
+		background: var(--bgs-crimson-bright);
+	}
+</style>

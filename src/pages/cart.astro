@@ -1,0 +1,505 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Your Cart | Bad Girls Should">
+	<Header cartHref="/cart" />
+
+	<main>
+		<section class="cart-page">
+			<div class="cart-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">Cart</span>
+				</nav>
+
+				<header class="page-header">
+					<p class="eyebrow">Checkout Ready</p>
+					<h1>Your Cart</h1>
+					<p class="lede">Review your picks. When Shopify is live, checkout runs on Shopify’s secure payment page.</p>
+				</header>
+
+				<div class="cart-layout">
+					<div class="cart-lines" data-cart-lines>
+						<div class="cart-empty" data-cart-empty>
+							<p>Your cart is empty.</p>
+							<a class="btn btn-primary" href="/range">Shop the Range</a>
+						</div>
+					</div>
+
+					<aside class="cart-summary" data-cart-summary hidden>
+						<p class="summary-eyebrow">Order Summary</p>
+						<div class="summary-row">
+							<span>Subtotal</span>
+							<strong data-cart-subtotal>£0.00</strong>
+						</div>
+						<div class="summary-row muted">
+							<span>Shipping</span>
+							<span>Calculated at checkout</span>
+						</div>
+						<div class="summary-total">
+							<span>Total</span>
+							<strong data-cart-total>£0.00</strong>
+						</div>
+						<button class="btn btn-primary summary-cta" type="button" data-shopify-checkout>
+							Checkout with Shopify
+						</button>
+						<a class="btn btn-outline summary-cta" href="/range">Continue Shopping</a>
+						<p class="summary-note" data-checkout-note>
+							Checkout opens Shopify’s secure payment page. Products need a Shopify size variant to
+							check out.
+						</p>
+					</aside>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.cart-page {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		min-height: 70vh;
+		overflow: hidden;
+		background:
+			radial-gradient(ellipse at 80% 10%, rgba(196, 30, 58, 0.18) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.cart-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.page-header {
+		position: relative;
+		margin-bottom: 2.5rem;
+		max-width: 36rem;
+	}
+
+	.eyebrow,
+	.summary-eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+		line-height: 1.15;
+		margin: 0 0 0.85rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		margin: 0;
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+	}
+
+	.cart-layout {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: 2rem;
+		align-items: start;
+	}
+
+	.cart-lines {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.cart-empty {
+		padding: 3rem 1.5rem;
+		text-align: center;
+		border: 1px dashed var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-charcoal);
+	}
+
+	.cart-empty p {
+		margin: 0 0 1.25rem;
+		color: var(--bgs-gray);
+	}
+
+	.cart-line {
+		display: grid;
+		grid-template-columns: 6.5rem 1fr auto;
+		gap: 1.25rem;
+		padding: 1.15rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-charcoal);
+	}
+
+	.cart-line img {
+		width: 6.5rem;
+		height: 6.5rem;
+		object-fit: cover;
+		border-radius: 4px;
+		background: #121212;
+	}
+
+	.line-body h2 {
+		font-family: var(--bgs-font-display);
+		font-size: 1.15rem;
+		font-weight: 400;
+		margin: 0 0 0.35rem;
+		color: var(--bgs-white);
+	}
+
+	.line-meta {
+		margin: 0 0 0.85rem;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--bgs-gray);
+	}
+
+	.line-controls {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.qty {
+		display: inline-flex;
+		align-items: center;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		overflow: hidden;
+	}
+
+	.qty button {
+		width: 2.25rem;
+		height: 2.25rem;
+		border: 0;
+		background: #121212;
+		color: var(--bgs-white);
+		cursor: pointer;
+		font-size: 1rem;
+	}
+
+	.qty button:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.qty span {
+		min-width: 2.25rem;
+		text-align: center;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+	}
+
+	.remove-btn {
+		border: 0;
+		background: transparent;
+		color: var(--bgs-gray);
+		font-family: var(--bgs-font-body);
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		cursor: pointer;
+		padding: 0;
+	}
+
+	.remove-btn:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.line-price {
+		font-size: 1.05rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--bgs-white);
+		white-space: nowrap;
+	}
+
+	.cart-summary {
+		position: sticky;
+		top: 6rem;
+		padding: 1.5rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 8px;
+		background: var(--bgs-charcoal);
+	}
+
+	.summary-row,
+	.summary-total {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0.85rem;
+		font-size: 0.95rem;
+	}
+
+	.summary-row.muted {
+		color: var(--bgs-gray);
+		font-size: 0.85rem;
+	}
+
+	.summary-total {
+		padding-top: 0.85rem;
+		margin-top: 0.5rem;
+		margin-bottom: 1.25rem;
+		border-top: 1px solid var(--bgs-gray-dark);
+		font-size: 1.1rem;
+	}
+
+	.summary-cta {
+		width: 100%;
+		margin-bottom: 0.75rem;
+	}
+
+	.summary-cta:disabled {
+		opacity: 0.55;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: none;
+	}
+
+	.summary-note.is-error {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.summary-note {
+		margin: 0.75rem 0 0;
+		font-size: 0.75rem;
+		line-height: 1.5;
+		color: #666;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.85rem 1.5rem;
+		font-family: var(--bgs-font-body);
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		border-radius: 4px;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition:
+			transform 0.15s,
+			box-shadow 0.2s,
+			background 0.2s,
+			border-color 0.2s;
+	}
+
+	.btn-primary {
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 4px 20px rgba(196, 30, 58, 0.35);
+	}
+
+	.btn-primary:hover {
+		background: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson-bright);
+		transform: translateY(-2px);
+	}
+
+	.btn-outline {
+		background: transparent;
+		color: var(--bgs-white);
+		border-color: var(--bgs-gray-dark);
+	}
+
+	.btn-outline:hover {
+		border-color: var(--bgs-white);
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	@media (max-width: 900px) {
+		.cart-layout {
+			grid-template-columns: 1fr;
+		}
+
+		.cart-summary {
+			position: static;
+		}
+
+		.cart-line {
+			grid-template-columns: 5rem 1fr;
+		}
+
+		.line-price {
+			grid-column: 2;
+		}
+	}
+</style>
+
+<script>
+	import {
+		createShopifyCheckoutUrl,
+		getCart,
+		getCartSubtotal,
+		isShopifyCheckoutReady,
+		removeFromCart,
+		updateCartQuantity,
+		type CartLine,
+	} from '../scripts/cart';
+
+	const money = (amount: number) =>
+		new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);
+
+	const linesEl = document.querySelector('[data-cart-lines]');
+	const emptyEl = document.querySelector('[data-cart-empty]');
+	const summaryEl = document.querySelector('[data-cart-summary]');
+	const subtotalEl = document.querySelector('[data-cart-subtotal]');
+	const totalEl = document.querySelector('[data-cart-total]');
+	const checkoutBtn = document.querySelector('[data-shopify-checkout]');
+	const checkoutNote = document.querySelector('[data-checkout-note]');
+
+	function render() {
+		if (!linesEl) return;
+		const lines = getCart();
+
+		linesEl.querySelectorAll('.cart-line').forEach((node) => node.remove());
+
+		if (lines.length === 0) {
+			if (emptyEl instanceof HTMLElement) emptyEl.hidden = false;
+			if (summaryEl instanceof HTMLElement) summaryEl.hidden = true;
+			return;
+		}
+
+		if (emptyEl instanceof HTMLElement) emptyEl.hidden = true;
+		if (summaryEl instanceof HTMLElement) summaryEl.hidden = false;
+
+		lines.forEach((line) => {
+			linesEl.appendChild(buildLine(line));
+		});
+
+		const subtotal = getCartSubtotal();
+		if (subtotalEl) subtotalEl.textContent = money(subtotal);
+		if (totalEl) totalEl.textContent = money(subtotal);
+
+		if (checkoutBtn instanceof HTMLButtonElement) {
+			checkoutBtn.disabled = !isShopifyCheckoutReady();
+		}
+	}
+
+	function buildLine(line: CartLine) {
+		const article = document.createElement('article');
+		article.className = 'cart-line';
+		article.innerHTML = `
+			<img src="${line.imageSrc}" alt="${line.imageAlt}" width="104" height="104" />
+			<div class="line-body">
+				<h2>${line.title}</h2>
+				<p class="line-meta">Size ${line.size}</p>
+				<div class="line-controls">
+					<div class="qty">
+						<button type="button" data-qty-dec aria-label="Decrease quantity">−</button>
+						<span>${line.quantity}</span>
+						<button type="button" data-qty-inc aria-label="Increase quantity">+</button>
+					</div>
+					<button type="button" class="remove-btn" data-remove>Remove</button>
+				</div>
+			</div>
+			<p class="line-price">${money(line.price * line.quantity)}</p>
+		`;
+
+		article.querySelector('[data-qty-dec]')?.addEventListener('click', () => {
+			updateCartQuantity(line.id, line.quantity - 1);
+			render();
+		});
+		article.querySelector('[data-qty-inc]')?.addEventListener('click', () => {
+			updateCartQuantity(line.id, line.quantity + 1);
+			render();
+		});
+		article.querySelector('[data-remove]')?.addEventListener('click', () => {
+			removeFromCart(line.id);
+			render();
+		});
+
+		return article;
+	}
+
+	checkoutBtn?.addEventListener('click', async () => {
+		if (!(checkoutBtn instanceof HTMLButtonElement)) return;
+		checkoutBtn.disabled = true;
+		checkoutBtn.textContent = 'Redirecting…';
+		if (checkoutNote instanceof HTMLElement) {
+			checkoutNote.classList.remove('is-error');
+			checkoutNote.textContent = 'Opening Shopify checkout…';
+		}
+
+		try {
+			const url = await createShopifyCheckoutUrl();
+			window.location.href = url;
+		} catch (error) {
+			checkoutBtn.disabled = !isShopifyCheckoutReady();
+			checkoutBtn.textContent = 'Checkout with Shopify';
+			if (checkoutNote instanceof HTMLElement) {
+				checkoutNote.classList.add('is-error');
+				checkoutNote.textContent =
+					error instanceof Error
+						? error.message
+						: 'Could not start Shopify checkout. Check products are published to the Storefront.';
+			}
+		}
+	});
+
+	render();
+	window.addEventListener('bgs:cart-updated', () => render());
+</script>

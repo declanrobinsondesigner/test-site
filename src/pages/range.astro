@@ -1,0 +1,232 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ProductGrid from '../components/ProductGrid.astro';
+import Pagination from '../components/Pagination.astro';
+import { getCatalogueProducts } from '../data/catalogue';
+import { paginate, parsePageParam } from '../data/pagination';
+
+export const prerender = false;
+
+const products = await getCatalogueProducts();
+const page = parsePageParam(Astro.url.searchParams.get('page'));
+const paged = paginate(products, page);
+---
+
+<Layout title="Explore Our Range | Bad Girls Should">
+	<Header cartHref="/range" />
+
+	<main>
+		<section class="catalog" id="range">
+			<div class="catalog-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					<span aria-current="page">Our Range</span>
+				</nav>
+
+				<header class="catalog-header">
+					<p class="eyebrow">Shop · XL+ Alternative Attire</p>
+					<h1>Explore Our Range</h1>
+					<p class="lede">
+						Everything in one place — graphic tees, zip jackets, dresses, and more. Bigger fits,
+						louder looks, no watered-down alt.
+					</p>
+
+					<div class="range-filters" aria-label="Shop by category">
+						<a class="tab is-active" href="/range">All</a>
+						<a class="tab" href="/mens">Men's</a>
+						<a class="tab" href="/womens">Women's</a>
+						<a class="tab" href="/brands">Brands</a>
+					</div>
+				</header>
+
+				<ProductGrid
+					products={paged.items}
+					emptyMessage="New pieces are landing soon — check back shortly, or message us on Facebook for what’s in right now."
+				/>
+				<Pagination result={paged} pathname="/range" searchParams={Astro.url.searchParams} />
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.catalog {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		min-height: 70vh;
+		background:
+			radial-gradient(ellipse at 75% 10%, rgba(196, 30, 58, 0.2) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.catalog-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.catalog-header {
+		position: relative;
+		max-width: 40rem;
+		margin-bottom: 3rem;
+		animation: rise-in 0.6s ease-out both;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.15;
+		margin: 0 0 1rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0 0 1.75rem;
+		letter-spacing: 0.02em;
+	}
+
+	.range-filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+	}
+
+	.tab {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.65rem 1.1rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-gray);
+		text-decoration: none;
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		transition:
+			color 0.2s,
+			border-color 0.2s,
+			background 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.tab:hover {
+		color: var(--bgs-white);
+		border-color: var(--bgs-white);
+	}
+
+	.tab.is-active {
+		color: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson);
+		background: rgba(196, 30, 58, 0.14);
+		box-shadow: 0 0 18px var(--bgs-crimson-glow);
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding: 0.85rem 1.75rem;
+		font-family: var(--bgs-font-body);
+		font-size: 0.9rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		text-decoration: none;
+		border-radius: 4px;
+		border: 2px solid transparent;
+		cursor: pointer;
+		transition:
+			transform 0.15s,
+			box-shadow 0.2s,
+			background 0.2s,
+			border-color 0.2s;
+	}
+
+	.btn-primary {
+		background: var(--bgs-crimson);
+		color: var(--bgs-white);
+		border-color: var(--bgs-crimson);
+		box-shadow: 0 4px 20px rgba(196, 30, 58, 0.35);
+	}
+
+	.btn-primary:hover {
+		background: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson-bright);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 28px var(--bgs-crimson-glow);
+	}
+
+	@keyframes rise-in {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

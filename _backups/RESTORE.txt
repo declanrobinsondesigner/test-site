@@ -1,0 +1,6 @@
+# Homepage CTA / layout checkpoint — before UX tweaks (29 Jul 2026)
+#
+# Restore previous homepage:
+#   Copy-Item _backups\index.astro.pre-cta-tweaks src\pages\index.astro -Force
+#
+# Or ask the agent: "revert the homepage CTA tweaks"

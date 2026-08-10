@@ -1,0 +1,250 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import ProductGrid from './ProductGrid.astro';
+import Pagination from './Pagination.astro';
+import { getCatalogueByDepartment } from '../data/catalogue';
+import { paginate, parsePageParam } from '../data/pagination';
+import { getNavCollections, type Department } from '../data/navigation';
+import type { Product } from '../data/products';
+
+interface Props {
+	department: Department;
+	typeHandle?: string;
+	title: string;
+	eyebrow: string;
+	heading: string;
+	description: string;
+	breadcrumbLabel: string;
+	emptyMessage?: string;
+	products?: Product[];
+}
+
+const {
+	department,
+	typeHandle,
+	title,
+	eyebrow,
+	heading,
+	description,
+	breadcrumbLabel,
+	emptyMessage = 'More pieces dropping soon — check back or message us on Facebook.',
+	products: productsProp,
+} = Astro.props;
+
+const basePath = department === 'mens' ? '/mens' : '/womens';
+const departmentLabel = department === 'mens' ? "Men's" : "Women's";
+const navItems = getNavCollections(department);
+const listing = productsProp ?? (await getCatalogueByDepartment(department, typeHandle));
+const pathname = typeHandle ? `${basePath}/${typeHandle}` : basePath;
+const page = parsePageParam(Astro.url.searchParams.get('page'));
+const paged = paginate(listing, page);
+---
+
+<Layout title={title}>
+	<Header />
+
+	<main>
+		<section class="catalog">
+			<div class="catalog-glow" aria-hidden="true"></div>
+			<div class="container">
+				<nav class="breadcrumb" aria-label="Breadcrumb">
+					<a href="/">Home</a>
+					<span aria-hidden="true">/</span>
+					{
+						typeHandle ? (
+							<>
+								<a href={basePath}>{departmentLabel}</a>
+								<span aria-hidden="true">/</span>
+								<span aria-current="page">{breadcrumbLabel}</span>
+							</>
+						) : (
+							<span aria-current="page">{departmentLabel}</span>
+						)
+					}
+				</nav>
+
+				<header class="catalog-header">
+					<p class="eyebrow">{eyebrow}</p>
+					<h1>{heading}</h1>
+					<p class="lede">{description}</p>
+
+					<div class="category-tabs" aria-label={`${departmentLabel} categories`}>
+						<a class:list={['tab', { 'is-active': !typeHandle }]} href={basePath}>
+							All {departmentLabel}
+						</a>
+						{
+							navItems.map((item) => (
+								<a
+									class:list={['tab', { 'is-active': typeHandle === item.handle }]}
+									href={`${basePath}/${item.handle}`}
+								>
+									{item.label}
+								</a>
+							))
+						}
+					</div>
+				</header>
+
+				<ProductGrid products={paged.items} emptyMessage={emptyMessage} />
+				<Pagination result={paged} pathname={pathname} searchParams={Astro.url.searchParams} />
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
+
+<style>
+	.container {
+		max-width: 1140px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.catalog {
+		position: relative;
+		padding: 2.5rem 0 5rem;
+		overflow: hidden;
+		min-height: 70vh;
+		background:
+			radial-gradient(ellipse at 75% 10%, rgba(196, 30, 58, 0.2) 0%, transparent 45%),
+			linear-gradient(180deg, #161616 0%, #0d0d0d 100%);
+	}
+
+	.catalog-glow {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(
+			0deg,
+			transparent,
+			transparent 2px,
+			rgba(255, 255, 255, 0.015) 2px,
+			rgba(255, 255, 255, 0.015) 4px
+		);
+		pointer-events: none;
+	}
+
+	.breadcrumb {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 2rem;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--bgs-gray);
+	}
+
+	.breadcrumb a {
+		text-decoration: none;
+		color: var(--bgs-gray);
+		transition: color 0.2s;
+	}
+
+	.breadcrumb a:hover {
+		color: var(--bgs-crimson-bright);
+	}
+
+	.breadcrumb [aria-current='page'] {
+		color: var(--bgs-white);
+	}
+
+	.catalog-header {
+		position: relative;
+		margin-bottom: 3rem;
+		animation: rise-in 0.6s ease-out both;
+	}
+
+	.catalog-header .lede {
+		max-width: 48rem;
+	}
+
+	.eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.2em;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--bgs-crimson-bright);
+		margin: 0 0 1rem;
+	}
+
+	h1 {
+		font-family: var(--bgs-font-display);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 1.15;
+		margin: 0 0 1rem;
+		color: var(--bgs-white);
+		font-weight: 400;
+	}
+
+	.lede {
+		font-size: 1.05rem;
+		line-height: 1.65;
+		color: var(--bgs-gray);
+		margin: 0 0 1.75rem;
+		letter-spacing: 0.02em;
+	}
+
+	.category-tabs {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.65rem;
+		width: 100%;
+	}
+
+	@media (min-width: 640px) {
+		.category-tabs {
+			grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+		}
+	}
+
+	.tab {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 0.75rem 0.85rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-gray);
+		text-decoration: none;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		line-height: 1.3;
+		transition:
+			color 0.2s,
+			border-color 0.2s,
+			background 0.2s,
+			box-shadow 0.2s;
+	}
+
+	.tab:hover {
+		color: var(--bgs-white);
+		border-color: var(--bgs-white);
+	}
+
+	.tab.is-active {
+		color: var(--bgs-crimson-bright);
+		border-color: var(--bgs-crimson);
+		background: rgba(196, 30, 58, 0.14);
+		box-shadow: 0 0 18px var(--bgs-crimson-glow);
+	}
+
+	@keyframes rise-in {
+		from {
+			opacity: 0;
+			transform: translateY(14px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

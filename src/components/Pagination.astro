@@ -1,0 +1,179 @@
+---
+import { pageHref, visiblePageNumbers, type PageResult } from '../data/pagination';
+
+interface Props {
+	result: PageResult<unknown>;
+	pathname: string;
+	searchParams?: URLSearchParams;
+}
+
+const { result, pathname, searchParams } = Astro.props;
+const pages = visiblePageNumbers(result.page, result.totalPages);
+const show = result.total > result.perPage;
+---
+
+{
+	show && (
+		<nav class="pagination" aria-label="Product pages">
+			<p class="pagination-meta">
+				Showing {result.from}–{result.to} of {result.total}
+			</p>
+			<div class="pagination-controls">
+				{result.hasPrev ? (
+					<a
+						class="page-btn"
+						href={pageHref(pathname, result.page - 1, searchParams)}
+						rel="prev"
+					>
+						← Prev
+					</a>
+				) : (
+					<span class="page-btn is-disabled" aria-disabled="true">
+						← Prev
+					</span>
+				)}
+
+				<ol class="page-list">
+					{pages.map((entry) =>
+						entry === '…' ? (
+							<li class="page-ellipsis" aria-hidden="true">
+								…
+							</li>
+						) : (
+							<li>
+								<a
+									class:list={['page-num', { 'is-active': entry === result.page }]}
+									href={pageHref(pathname, entry, searchParams)}
+									aria-current={entry === result.page ? 'page' : undefined}
+								>
+									{entry}
+								</a>
+							</li>
+						),
+					)}
+				</ol>
+
+				{result.hasNext ? (
+					<a
+						class="page-btn"
+						href={pageHref(pathname, result.page + 1, searchParams)}
+						rel="next"
+					>
+						Next →
+					</a>
+				) : (
+					<span class="page-btn is-disabled" aria-disabled="true">
+						Next →
+					</span>
+				)}
+			</div>
+		</nav>
+	)
+}
+
+<style>
+	.pagination {
+		margin-top: 2.5rem;
+		padding-top: 1.75rem;
+		border-top: 1px solid var(--bgs-gray-dark);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.pagination-meta {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--bgs-gray);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.pagination-controls {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.65rem;
+	}
+
+	.page-list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.page-btn,
+	.page-num {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.4rem;
+		padding: 0.45rem 0.9rem;
+		border: 1px solid var(--bgs-gray-dark);
+		border-radius: 4px;
+		background: var(--bgs-charcoal);
+		color: var(--bgs-white);
+		font-family: var(--bgs-font-body);
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		text-decoration: none;
+		transition:
+			border-color 0.2s,
+			background 0.2s,
+			color 0.2s;
+	}
+
+	.page-num {
+		min-width: 2.4rem;
+		padding: 0.45rem 0.55rem;
+	}
+
+	.page-btn:hover,
+	.page-num:hover {
+		border-color: var(--bgs-crimson);
+		color: var(--bgs-crimson-bright);
+	}
+
+	.page-num.is-active {
+		background: var(--bgs-crimson);
+		border-color: var(--bgs-crimson);
+		color: var(--bgs-white);
+		box-shadow: 0 4px 16px var(--bgs-crimson-glow);
+	}
+
+	.page-btn.is-disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
+	}
+
+	.page-ellipsis {
+		padding: 0 0.25rem;
+		color: var(--bgs-gray);
+		letter-spacing: 0.1em;
+	}
+
+	@media (max-width: 600px) {
+		.pagination-controls {
+			width: 100%;
+			gap: 0.5rem;
+		}
+
+		.page-btn {
+			flex: 1 1 auto;
+		}
+
+		.page-list {
+			order: 3;
+			width: 100%;
+			justify-content: center;
+		}
+	}
+</style>
