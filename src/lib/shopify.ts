@@ -239,28 +239,41 @@ const PAGE_SIZE = 50;
 /** Safety cap — 50 pages × 50 = 2,500 products. */
 const MAX_PAGES = 50;
 
-function readEnvValue(key: string): string {
-	const runtimeEnv = env as unknown as Record<string, unknown>;
-	const fromRuntime = runtimeEnv[key];
-	if (typeof fromRuntime === 'string' && fromRuntime.trim()) return fromRuntime.trim();
-
-	const fromMeta = (import.meta.env as Record<string, unknown>)[key];
-	if (typeof fromMeta === 'string' && fromMeta.trim()) return fromMeta.trim();
-
-	const fromProcess = typeof process !== 'undefined' ? process.env?.[key] : undefined;
-	if (typeof fromProcess === 'string' && fromProcess.trim()) return fromProcess.trim();
-
-	return '';
+function trimEnv(value: unknown): string {
+	return typeof value === 'string' ? value.trim() : '';
 }
 
 function getServerConfig() {
+	const runtimeEnv = env as unknown as Record<string, unknown>;
+
+	// Prefer Worker runtime bindings (Settings → Variables and secrets).
+	// Fall back to Vite/build values — these must be static import.meta.env.* reads
+	// so they get inlined during `astro build`.
 	const domain =
-		readEnvValue('SHOPIFY_STORE_DOMAIN') || readEnvValue('PUBLIC_SHOPIFY_STORE_DOMAIN');
+		trimEnv(runtimeEnv.SHOPIFY_STORE_DOMAIN) ||
+		trimEnv(runtimeEnv.PUBLIC_SHOPIFY_STORE_DOMAIN) ||
+		trimEnv(import.meta.env.SHOPIFY_STORE_DOMAIN) ||
+		trimEnv(import.meta.env.PUBLIC_SHOPIFY_STORE_DOMAIN) ||
+		trimEnv(typeof process !== 'undefined' ? process.env?.SHOPIFY_STORE_DOMAIN : undefined) ||
+		trimEnv(typeof process !== 'undefined' ? process.env?.PUBLIC_SHOPIFY_STORE_DOMAIN : undefined);
+
 	const token =
-		readEnvValue('SHOPIFY_STOREFRONT_TOKEN') || readEnvValue('PUBLIC_SHOPIFY_STOREFRONT_TOKEN');
+		trimEnv(runtimeEnv.SHOPIFY_STOREFRONT_TOKEN) ||
+		trimEnv(runtimeEnv.PUBLIC_SHOPIFY_STOREFRONT_TOKEN) ||
+		trimEnv(import.meta.env.SHOPIFY_STOREFRONT_TOKEN) ||
+		trimEnv(import.meta.env.PUBLIC_SHOPIFY_STOREFRONT_TOKEN) ||
+		trimEnv(typeof process !== 'undefined' ? process.env?.SHOPIFY_STOREFRONT_TOKEN : undefined) ||
+		trimEnv(
+			typeof process !== 'undefined' ? process.env?.PUBLIC_SHOPIFY_STOREFRONT_TOKEN : undefined,
+		);
+
 	const version =
-		readEnvValue('SHOPIFY_API_VERSION') ||
-		readEnvValue('PUBLIC_SHOPIFY_API_VERSION') ||
+		trimEnv(runtimeEnv.SHOPIFY_API_VERSION) ||
+		trimEnv(runtimeEnv.PUBLIC_SHOPIFY_API_VERSION) ||
+		trimEnv(import.meta.env.SHOPIFY_API_VERSION) ||
+		trimEnv(import.meta.env.PUBLIC_SHOPIFY_API_VERSION) ||
+		trimEnv(typeof process !== 'undefined' ? process.env?.SHOPIFY_API_VERSION : undefined) ||
+		trimEnv(typeof process !== 'undefined' ? process.env?.PUBLIC_SHOPIFY_API_VERSION : undefined) ||
 		'2025-01';
 
 	return { domain, token, version };
