@@ -18,7 +18,7 @@ import { resolveBrandLabel, slugifyBrand } from './navigation';
 
 let cachedCatalogue: Product[] | null = null;
 let cacheTimestamp = 0;
-const CACHE_MS = 60 * 1000; // 1 minute — new Shopify uploads show up quickly
+const CACHE_MS = 5 * 60 * 1000; // 5 minutes — keeps grids snappy under load
 
 const collectionCache = new Map<string, { products: Product[]; timestamp: number }>();
 const productCache = new Map<string, { product: Product; timestamp: number }>();
