@@ -97,15 +97,76 @@ function getShopifyPublicConfig() {
 	};
 }
 
+type ShopifyPublicConfig = {
+	domain: string;
+	token: string;
+	version: string;
+};
+
+let cachedPublicConfig: ShopifyPublicConfig | null = null;
+let publicConfigPromise: Promise<ShopifyPublicConfig | null> | null = null;
+
+async function loadShopifyPublicConfig(): Promise<ShopifyPublicConfig | null> {
+	if (cachedPublicConfig) return cachedPublicConfig;
+	if (publicConfigPromise) return publicConfigPromise;
+
+	publicConfigPromise = (async () => {
+		const fromEnv = getShopifyPublicConfig();
+		if (fromEnv.domain && fromEnv.token) {
+			cachedPublicConfig = {
+				domain: fromEnv.domain,
+				token: fromEnv.token,
+				version: fromEnv.version || '2025-01',
+			};
+			return cachedPublicConfig;
+		}
+
+		try {
+			const response = await fetch('/api/shopify-config');
+			if (!response.ok) return null;
+			const json = (await response.json()) as {
+				ok?: boolean;
+				domain?: string;
+				token?: string;
+				version?: string;
+			};
+			if (!json.ok || !json.domain || !json.token) return null;
+			cachedPublicConfig = {
+				domain: json.domain,
+				token: json.token,
+				version: json.version || '2025-01',
+			};
+			return cachedPublicConfig;
+		} catch {
+			return null;
+		} finally {
+			publicConfigPromise = null;
+		}
+	})();
+
+	return publicConfigPromise;
+}
+
 export function isShopifyCheckoutReady(): boolean {
-	const { domain, token } = getShopifyPublicConfig();
+	const fromEnv = getShopifyPublicConfig();
 	const lines = readCart();
-	return Boolean(domain && token && lines.some((line) => line.merchandiseId));
+	const hasLines = lines.some((line) => line.merchandiseId);
+	if (!hasLines) return false;
+	if (cachedPublicConfig?.domain && cachedPublicConfig?.token) return true;
+	return Boolean(fromEnv.domain && fromEnv.token);
+}
+
+export async function ensureShopifyCheckoutReady(): Promise<boolean> {
+	const lines = readCart();
+	if (!lines.some((line) => line.merchandiseId)) return false;
+	const config = await loadShopifyPublicConfig();
+	return Boolean(config?.domain && config?.token);
 }
 
 async function shopifyCartFetch<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
-	const { domain, token, version } = getShopifyPublicConfig();
-	if (!domain || !token) throw new Error('Shopify is not configured');
+	const config = await loadShopifyPublicConfig();
+	if (!config) throw new Error('Shopify is not configured');
+	const { domain, token, version } = config;
 
 	const response = await fetch(`https://${domain}/api/${version}/graphql.json`, {
 		method: 'POST',

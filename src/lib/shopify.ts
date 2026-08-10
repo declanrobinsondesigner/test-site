@@ -3,6 +3,7 @@
  * Credentials come from .env (see .env.example).
  */
 
+import { env } from 'cloudflare:workers';
 import type {
 	CollectionHandle,
 	Product,
@@ -238,26 +239,41 @@ const PAGE_SIZE = 50;
 /** Safety cap — 50 pages × 50 = 2,500 products. */
 const MAX_PAGES = 50;
 
+function readEnvValue(key: string): string {
+	const runtimeEnv = env as unknown as Record<string, unknown>;
+	const fromRuntime = runtimeEnv[key];
+	if (typeof fromRuntime === 'string' && fromRuntime.trim()) return fromRuntime.trim();
+
+	const fromMeta = (import.meta.env as Record<string, unknown>)[key];
+	if (typeof fromMeta === 'string' && fromMeta.trim()) return fromMeta.trim();
+
+	const fromProcess = typeof process !== 'undefined' ? process.env?.[key] : undefined;
+	if (typeof fromProcess === 'string' && fromProcess.trim()) return fromProcess.trim();
+
+	return '';
+}
+
 function getServerConfig() {
 	const domain =
-		import.meta.env.SHOPIFY_STORE_DOMAIN || import.meta.env.PUBLIC_SHOPIFY_STORE_DOMAIN;
+		readEnvValue('SHOPIFY_STORE_DOMAIN') || readEnvValue('PUBLIC_SHOPIFY_STORE_DOMAIN');
 	const token =
-		import.meta.env.SHOPIFY_STOREFRONT_TOKEN || import.meta.env.PUBLIC_SHOPIFY_STOREFRONT_TOKEN;
+		readEnvValue('SHOPIFY_STOREFRONT_TOKEN') || readEnvValue('PUBLIC_SHOPIFY_STOREFRONT_TOKEN');
 	const version =
-		import.meta.env.SHOPIFY_API_VERSION ||
-		import.meta.env.PUBLIC_SHOPIFY_API_VERSION ||
+		readEnvValue('SHOPIFY_API_VERSION') ||
+		readEnvValue('PUBLIC_SHOPIFY_API_VERSION') ||
 		'2025-01';
 
-	return {
-		domain: typeof domain === 'string' ? domain.trim() : '',
-		token: typeof token === 'string' ? token.trim() : '',
-		version: typeof version === 'string' ? version.trim() : '2025-01',
-	};
+	return { domain, token, version };
 }
 
 export function isShopifyConfigured(): boolean {
 	const { domain, token } = getServerConfig();
 	return Boolean(domain && token);
+}
+
+/** Public Storefront credentials for browser checkout (token is meant to be public). */
+export function getServerShopifyPublicConfig() {
+	return getServerConfig();
 }
 
 export async function shopifyFetch<T>(

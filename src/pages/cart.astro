@@ -392,6 +392,7 @@ import Footer from '../components/Footer.astro';
 <script>
 	import {
 		createShopifyCheckoutUrl,
+		ensureShopifyCheckoutReady,
 		getCart,
 		getCartSubtotal,
 		isShopifyCheckoutReady,
@@ -410,6 +411,11 @@ import Footer from '../components/Footer.astro';
 	const totalEl = document.querySelector('[data-cart-total]');
 	const checkoutBtn = document.querySelector('[data-shopify-checkout]');
 	const checkoutNote = document.querySelector('[data-checkout-note]');
+
+	async function syncCheckoutButton() {
+		if (!(checkoutBtn instanceof HTMLButtonElement)) return;
+		checkoutBtn.disabled = !(await ensureShopifyCheckoutReady());
+	}
 
 	function render() {
 		if (!linesEl) return;
@@ -437,6 +443,7 @@ import Footer from '../components/Footer.astro';
 		if (checkoutBtn instanceof HTMLButtonElement) {
 			checkoutBtn.disabled = !isShopifyCheckoutReady();
 		}
+		void syncCheckoutButton();
 	}
 
 	function buildLine(line: CartLine) {
@@ -488,7 +495,7 @@ import Footer from '../components/Footer.astro';
 			const url = await createShopifyCheckoutUrl();
 			window.location.href = url;
 		} catch (error) {
-			checkoutBtn.disabled = !isShopifyCheckoutReady();
+			checkoutBtn.disabled = !(await ensureShopifyCheckoutReady());
 			checkoutBtn.textContent = 'Checkout with Shopify';
 			if (checkoutNote instanceof HTMLElement) {
 				checkoutNote.classList.add('is-error');
