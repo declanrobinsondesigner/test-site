@@ -452,8 +452,10 @@ function mapCollections(product: ShopifyProduct): CollectionHandle[] {
 		jackets: 'jackets',
 		'bowling-shirt': 'bowling-shirts',
 		'bowling-shirts': 'bowling-shirts',
+		'bowling-worker-shirts': 'bowling-shirts',
 		'worker-shirt': 'worker-shirts',
 		'worker-shirts': 'worker-shirts',
+		'gifts-lifestyle': 'gifts',
 		jumper: 'jumpers',
 		jumpers: 'jumpers',
 		cardigan: 'cardigans',
@@ -788,15 +790,74 @@ export async function fetchShopifyProductByHandle(handle: string): Promise<Produ
 	return data.product ? mapShopifyProduct(data.product) : null;
 }
 
+/**
+ * Site routes use plural handles (mens, trousers). Shopify Admin often creates
+ * singular / suffixed handles (mens-1, trouser). Try known aliases in order.
+ */
+function shopifyCollectionHandleCandidates(handle: string): string[] {
+	const aliases: Record<string, string[]> = {
+		mens: ['mens-1', 'mens', 'men'],
+		womens: ['womens', 'womens-1', 'women'],
+		't-shirts': ['t-shirt', 't-shirts'],
+		'zip-up-hoodies': ['zip-up-hoodie', 'zip-up-hoodies'],
+		jackets: ['jacket', 'jackets'],
+		'bowling-shirts': ['bowling-worker-shirts', 'bowling-shirt', 'bowling-shirts'],
+		'worker-shirts': ['worker-shirt', 'worker-shirts'],
+		jumpers: ['jumper', 'jumpers'],
+		cardigans: ['cardigan', 'cardigans'],
+		skirts: ['skirt', 'skirts'],
+		tops: ['top', 'tops'],
+		trousers: ['trouser', 'trousers'],
+		leggings: ['legging', 'leggings'],
+		shorts: ['short', 'shorts'],
+		shoes: ['shoe', 'shoes'],
+		bags: ['bag', 'bags'],
+		wallets: ['wallet', 'wallets'],
+		chains: ['chain', 'chains'],
+		belts: ['belt', 'belts'],
+		gifts: ['gifts-lifestyle', 'gifts'],
+	};
+
+	const key = handle.toLowerCase();
+	const list = aliases[key] || [key];
+	return [...new Set([key, ...list])];
+}
+
+const resolvedCollectionHandles = new Map<string, string>();
+
+async function resolveShopifyCollectionHandle(handle: string): Promise<string | null> {
+	const key = handle.toLowerCase();
+	const cached = resolvedCollectionHandles.get(key);
+	if (cached) return cached;
+
+	for (const candidate of shopifyCollectionHandleCandidates(handle)) {
+		const data = await shopifyFetch<{ collection: { handle: string } | null }>(
+			`
+      query CollectionExists($handle: String!) {
+        collection(handle: $handle) { handle }
+      }
+    `,
+			{ handle: candidate },
+		);
+		if (data.collection?.handle) {
+			resolvedCollectionHandles.set(key, data.collection.handle);
+			return data.collection.handle;
+		}
+	}
+	return null;
+}
+
 /** Products in a Shopify collection (paginated, card fields). */
 export async function fetchShopifyCollectionProducts(handle: string): Promise<Product[]> {
 	if (!isShopifyConfigured() || !handle) return [];
+
+	const shopifyHandle = (await resolveShopifyCollectionHandle(handle)) || handle;
 
 	return fetchAllProductPages(async (after) => {
 		const data = await shopifyFetch<{
 			collection: { products: ProductsConnection } | null;
 		}>(COLLECTION_PRODUCTS_PAGE_QUERY, {
-			handle,
+			handle: shopifyHandle,
 			first: PAGE_SIZE,
 			after,
 		});
